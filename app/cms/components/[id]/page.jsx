@@ -13,10 +13,11 @@ export default async function ComponentEditor({ params }) {
   const component = id === "new" ? null : db.prepare("SELECT * FROM cms_components WHERE id = ?").get(Number(id));
   if (id !== "new" && !component) notFound();
   const media = db.prepare("SELECT url, alt_text FROM cms_media WHERE mime LIKE 'image/%' ORDER BY id DESC LIMIT 100").all();
+  const collections = db.prepare("SELECT id, name FROM cms_collection_types ORDER BY name").all();
   return <>
     <Head title={component ? component.name : "New component"} sub="A shared section can be placed on multiple pages."><Link className="btn btn-ghost" href="/cms/components/">← Components</Link></Head>
     <section className="a-card"><ActionForm action={saveCmsComponent} submit="Save component" className="form a-form3" hidden={{ id: component?.id || "" }} fields={[{ name: "name", label: "Component name", required: true, defaultValue: component?.name, full: true }]}>
-      <CmsSections initial={component ? [JSON.parse(component.section)] : [{ type: "text", heading: "", body: "", visible: true }]} media={media} cms />
+      <CmsSections initial={component ? [JSON.parse(component.section)] : [{ type: "text", heading: "", body: "", visible: true }]} media={media} collections={collections} cms />
     </ActionForm></section>
   </>;
 }

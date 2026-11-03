@@ -17,6 +17,22 @@ export default function CmsPage({ page }) {
       if (s.type === "gallery") return <section className="section" key={i}><div className="wrap">{s.heading && <h2>{s.heading}</h2>}<Gallery items={siteContent().gallery || []} /></div></section>;
       if (s.type === "artists") return <section className="section" key={i}><div className="wrap">{s.heading && <h2>{s.heading}</h2>}<div className="grid g4">{(siteContent().artists || []).map((a) => <ArtistCard key={a.slug} a={a} />)}</div></div></section>;
       if (s.type === "events") return <section className="section" key={i}><div className="wrap">{s.heading && <h2>{s.heading}</h2>}<div className="grid">{publicEvents().map(view).map((e) => <EventCard key={e.id} e={e} />)}</div></div></section>;
+      if (s.type === "collection") {
+        const model = db.prepare("SELECT fields FROM cms_collection_types WHERE id=?").get(Number(s.collectionId));
+        if (!model) return null;
+        const fields = JSON.parse(model.fields);
+        const entries = db.prepare("SELECT id,data FROM cms_collection_entries WHERE type_id=? AND status='published' ORDER BY id DESC LIMIT 24").all(Number(s.collectionId));
+        return <section className="section" key={i}><div className="wrap">{s.heading && <h2>{s.heading}</h2>}<div className="grid g3">{entries.map((entry) => {
+          const values = JSON.parse(entry.data);
+          return <article className="card" key={entry.id} style={{ padding: 24 }}>{fields.map((field) => {
+            const value = values[field.key];
+            if (value === undefined || value === "" || value === false) return null;
+            if (field.type === "media") return <img key={field.key} src={value} alt={String(values.title || field.label)} style={{ maxWidth: "100%", height: "auto" }} />;
+            if (field.type === "boolean") return <p key={field.key}>{field.label}: Yes</p>;
+            return <p key={field.key} style={{ whiteSpace: "pre-line" }}><b>{field.label}:</b> {String(value)}</p>;
+          })}</article>;
+        })}</div></div></section>;
+      }
       return <section className="section" key={i}><div className="wrap"><div className="stack" style={{ maxWidth: 800 }}>{s.heading && <h2>{s.heading}</h2>}{s.body && <p className="lead" style={{ whiteSpace: "pre-line" }}>{s.body}</p>}{button}</div></div></section>;
     })}
   </article>;

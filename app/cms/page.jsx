@@ -13,6 +13,7 @@ export default async function CmsHome() {
   const media = db.prepare("SELECT COUNT(*) total, SUM(mime LIKE 'image/%') images FROM cms_media").get();
   const nav = db.prepare("SELECT COUNT(*) total FROM cms_navigation").get();
   const components = db.prepare("SELECT COUNT(*) total FROM cms_components").get();
+  const collections = db.prepare("SELECT COUNT(*) total FROM cms_collection_types").get();
   const recent = db.prepare("SELECT id, title, slug, status, updated_at FROM cms_pages ORDER BY updated_at DESC LIMIT 8").all();
   return <>
     <Head title="Content studio" sub="Manage the content published on surraa.com.">
@@ -25,6 +26,7 @@ export default async function CmsHome() {
       <Stat label="Media assets" value={media.total} hint={`${media.images || 0} images`} href="/cms/media/" />
       <Stat label="Navigation links" value={nav.total} href="/cms/navigation/" />
       <Stat label="Reusable components" value={components.total} href="/cms/components/" />
+      <Stat label="Collection types" value={collections.total} href="/cms/collections/" />
     </div>
     <section className="a-card" style={{ marginTop: 20 }}>
       <h2>Recently updated pages</h2>

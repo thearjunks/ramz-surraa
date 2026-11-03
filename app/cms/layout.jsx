@@ -11,6 +11,7 @@ const items = [
   ["Overview", "/cms/", "star"],
   ["Pages", "/cms/pages/", "screen"],
   ["Components", "/cms/components/", "sliders"],
+  ["Collection types", "/cms/collections/", "screen"],
   ["Site content", "/cms/site/", "star"],
   ["Media library", "/cms/media/", "camera"],
   ["Navigation", "/cms/navigation/", "sliders"],
