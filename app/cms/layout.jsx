@@ -27,6 +27,6 @@ export default async function CmsLayout({ children }) {
         <div className="btn-row" style={{ marginTop: 10 }}><Link className="btn btn-ghost btn-sm" href="/" target="_blank">View site</Link><form action={signOut}><button className="btn btn-ghost btn-sm">Sign out</button></form></div>
       </div>
     </aside>
-    <main className="admin-main" id="main"><div className="cms-topline"><span>SURRAA / Content studio</span><Link href="/admin/">Open admin dashboard ↗</Link></div>{children}</main>
+    <main className="admin-main" id="main"><div className="cms-topline"><span>SURRAA / Content studio</span></div>{children}</main>
   </div>;
 }
