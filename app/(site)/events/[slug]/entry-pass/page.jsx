@@ -14,7 +14,7 @@ export const metadata = { title: "Request Entry Pass | SURRAA Community Associat
 
 export default async function RequestPass({ params }) {
   const raw = getEvent((await params).slug);
-  if (!raw || raw.status === "draft") notFound();
+  if (!raw || raw.status === "draft" || raw.is_hidden) notFound();
   const e = view(raw);
   const user = await currentUser();
   const max = Math.max(1, Math.min(e.max_per_booking, eventStats(e.id).available));

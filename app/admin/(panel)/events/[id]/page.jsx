@@ -26,6 +26,7 @@ export default async function EventEdit({ params, searchParams }) {
           { name: "name", label: "Event name", required: true, defaultValue: d.name, full: true },
           { name: "category", label: "Category", defaultValue: d.category, placeholder: "Live Concert" },
           { name: "status", label: "Event status", type: "select", noEmpty: true, options: statuses, defaultValue: d.status, hint: "“Fully Booked” is set automatically when capacity runs out." },
+          { name: "is_hidden", type: "checkbox", label: "Hide event from website", defaultValue: !!d.is_hidden, hint: "Hidden events stay available to admins and keep their booking status." },
           { name: "members_only", type: "checkbox", label: "Members only (invitation event)", defaultValue: !!d.members_only },
           { name: "date", label: "Event date", type: "date", required: true, defaultValue: d.date },
           { name: "start_time", label: "Start time", type: "time", defaultValue: d.start_time },

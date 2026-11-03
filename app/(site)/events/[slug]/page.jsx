@@ -10,7 +10,7 @@ import { getEvent, view, gcal } from "@/lib/bookings";
 
 export const dynamic = "force-dynamic";
 
-const load = async (params) => { const e = getEvent((await params).slug); return e && e.status !== "draft" ? view(e) : null; };
+const load = async (params) => { const e = getEvent((await params).slug); return e && e.status !== "draft" && !e.is_hidden ? view(e) : null; };
 
 export async function generateMetadata({ params }) {
   const e = await load(params);
