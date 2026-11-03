@@ -12,10 +12,10 @@ export default async function ContentPages({ cms = false }) {
   const pages = db.prepare("SELECT id, slug, title, status, updated_at FROM cms_pages ORDER BY updated_at DESC").all();
   const bySlug = Object.fromEntries(pages.map((p) => [p.slug, p]));
   return <>
-    <Head title="Pages" sub="Create, preview and publish website pages."><Link className="btn btn-ghost" href={cms ? "/cms/" : "/admin/content/"}>Overview</Link><Link className="btn btn-ghost" href={`${base}site/`}>Site content</Link><Link className="btn btn-ghost" href={`${base}media/`}>Media library</Link><Link className="btn btn-ghost" href={`${base}navigation/`}>Navigation</Link><Link className="btn btn-primary" href={cms ? "/cms/pages/new/" : "/admin/content/new/"}>New page</Link></Head>
+    <Head title="Pages" sub="Create, preview and publish website pages."><Link className="btn btn-primary" href={cms ? "/cms/pages/new/" : "/admin/content/new/"}>New page</Link></Head>
     <section className="a-card" style={{ marginBottom: 20 }}><h2>Website pages</h2><p className="muted">The live site includes these built-in pages. Site content and event data are managed in their existing editors; custom CMS pages appear below.</p>
       <div className="a-table-wrap"><table className="a-table"><thead><tr><th>Page</th><th>URL</th><th>Content source</th><th>Actions</th></tr></thead><tbody>
-        {SITE_ROUTES.map(([title, route, slug]) => <tr key={route}><td>{title}</td><td><a href={route} target="_blank" rel="noreferrer">{route}</a></td><td>{bySlug[slug]?.status === "published" ? "CMS page" : "Site template + CMS blocks"}</td><td><Link href={`/cms/routes/${slug}/`}>Edit blocks</Link>{bySlug[slug] && <> · <Link href={`/cms/pages/${bySlug[slug].id}/`}>Edit CMS page</Link></>}</td></tr>)}
+        {SITE_ROUTES.map(([title, route, slug]) => <tr key={route}><td>{title}</td><td><a href={route} target="_blank" rel="noreferrer">{route}</a></td><td>{slug === "home" ? "Homepage tree" : bySlug[slug]?.status === "published" ? "CMS page" : "Site template + CMS blocks"}</td><td><Link href={slug === "home" ? "/cms/home/" : `/cms/routes/${slug}/`}>{slug === "home" ? "Edit homepage" : "Edit blocks"}</Link>{bySlug[slug] && <> · <Link href={`/cms/pages/${bySlug[slug].id}/`}>Edit CMS page</Link></>}</td></tr>)}
         <tr><td>Admin dashboard</td><td><a href="/admin/" target="_blank" rel="noreferrer">/admin/</a></td><td>Protected application</td><td>Managed in Admin</td></tr>
       </tbody></table></div>
     </section>

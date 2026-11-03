@@ -1,0 +1,184 @@
+[
+  {
+    "filename": "ambika.jpg",
+    "url": "/images/ambika.jpg",
+    "size": 230736,
+    "folder": "Artists & People",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "dilki.jpg",
+    "url": "/images/dilki.jpg",
+    "size": 180988,
+    "folder": "Artists & People",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "dj-mj.jpg",
+    "url": "/images/dj-mj.jpg",
+    "size": 227990,
+    "folder": "Artists & People",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "favicon.png",
+    "url": "/images/favicon.png",
+    "size": 8499,
+    "folder": "Logos & Branding",
+    "mime": "image/png"
+  },
+  {
+    "filename": "g-ambika-blue.jpg",
+    "url": "/images/g-ambika-blue.jpg",
+    "size": 109927,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-ambika-green.jpg",
+    "url": "/images/g-ambika-green.jpg",
+    "size": 185965,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-ambika-host.jpg",
+    "url": "/images/g-ambika-host.jpg",
+    "size": 162638,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-ambika-mono.jpg",
+    "url": "/images/g-ambika-mono.jpg",
+    "size": 49796,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-ambika-stage.jpg",
+    "url": "/images/g-ambika-stage.jpg",
+    "size": 134538,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-dilki-black.jpg",
+    "url": "/images/g-dilki-black.jpg",
+    "size": 150269,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-dilki-green.jpg",
+    "url": "/images/g-dilki-green.jpg",
+    "size": 112139,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-dilki-stage.jpg",
+    "url": "/images/g-dilki-stage.jpg",
+    "size": 144363,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-dilki-teal.jpg",
+    "url": "/images/g-dilki-teal.jpg",
+    "size": 158497,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-dj-mj.jpg",
+    "url": "/images/g-dj-mj.jpg",
+    "size": 197662,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "g-ramz-live.jpg",
+    "url": "/images/g-ramz-live.jpg",
+    "size": 164482,
+    "folder": "Gallery Images",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "poster-en.jpg",
+    "url": "/images/poster-en.jpg",
+    "size": 301503,
+    "folder": "Events & Campaigns",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "poster-si.jpg",
+    "url": "/images/poster-si.jpg",
+    "size": 305607,
+    "folder": "Events & Campaigns",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "ramz.jpg",
+    "url": "/images/ramz.jpg",
+    "size": 250092,
+    "folder": "Artists & People",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "sandun.jpg",
+    "url": "/images/sandun.jpg",
+    "size": 186838,
+    "folder": "Artists & People",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "surraa-logo.png",
+    "url": "/images/surraa-logo.png",
+    "size": 130745,
+    "folder": "Logos & Branding",
+    "mime": "image/png"
+  },
+  {
+    "filename": "concert-hall.jpg",
+    "url": "/images/hero/concert-hall.jpg",
+    "size": 285479,
+    "folder": "Homepage Banners",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "concert-stage-lights.jpg",
+    "url": "/images/hero/concert-stage-lights.jpg",
+    "size": 293974,
+    "folder": "Homepage Banners",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "dj-decks.jpg",
+    "url": "/images/hero/dj-decks.jpg",
+    "size": 180441,
+    "folder": "Homepage Banners",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "festival-stage.jpg",
+    "url": "/images/hero/festival-stage.jpg",
+    "size": 194441,
+    "folder": "Homepage Banners",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "hands-up.jpg",
+    "url": "/images/hero/hands-up.jpg",
+    "size": 173442,
+    "folder": "Homepage Banners",
+    "mime": "image/jpeg"
+  },
+  {
+    "filename": "laser-crowd.jpg",
+    "url": "/images/hero/laser-crowd.jpg",
+    "size": 253991,
+    "folder": "Homepage Banners",
+    "mime": "image/jpeg"
+  }
+]

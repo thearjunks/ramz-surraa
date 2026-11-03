@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import ActionForm from "@/components/ActionForm";
 import CmsSections from "@/components/admin/CmsSections";
 import { Head } from "@/components/admin/ui";
@@ -11,6 +11,7 @@ import { saveCmsRoute } from "@/lib/cms-actions";
 export default async function RouteEditor({ params, searchParams }) {
   await requirePerm("content");
   const slug = (await params).slug;
+  if (slug === "home") redirect("/cms/home/");
   const route = SITE_ROUTES.find((item) => item[2] === slug);
   if (!route) notFound();
   const saved = db.prepare("SELECT * FROM cms_route_sections WHERE slug=?").get(slug);

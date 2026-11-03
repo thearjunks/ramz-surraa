@@ -709,6 +709,14 @@ a.a-stat:hover{border-color:var(--line2)}
 @media(max-width:900px){.a-form3{grid-template-columns:1fr}}
 .pill.info{background:rgba(80,160,255,.14);color:#8fc1ff;border-color:rgba(80,160,255,.3)}
 details.a-card summary{cursor:pointer;list-style:none}
+.home-tree{display:grid;gap:12px}.home-node,.home-child{border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.home-node>summary,.home-child>summary{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;list-style:none}
+.home-node>summary::-webkit-details-marker,.home-child>summary::-webkit-details-marker{display:none}
+.home-node>summary b{flex:1}.home-grip{font-weight:900;letter-spacing:-.15em;color:var(--muted);cursor:grab;font-size:23px;line-height:1}
+.home-node-body{display:grid;gap:14px;padding:18px;border-top:1px solid var(--line)}.home-node-body .btn-row{align-items:center;flex-wrap:wrap}
+.home-children{display:grid;gap:9px;padding:15px;border:1px dashed var(--line2);border-radius:12px}.home-children h3{font-size:20px;margin:0 0 4px}
+.home-child{background:var(--night)}.home-child>summary{padding:11px 14px}.home-child-body{display:grid;gap:12px;padding:14px;border-top:1px solid var(--line)}
+.home-tree-form .btn-row{flex-wrap:wrap}.cms-preview-bar{position:sticky;top:0;z-index:100;padding:10px 20px;background:#d9ec3b;color:#101513;text-align:center;font-weight:800}
 /* scanner */
 .scanner{display:grid;gap:14px}
 .scan-cam{aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--night);border:1px solid var(--line2);display:grid;place-items:center}
