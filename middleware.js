@@ -4,7 +4,7 @@ export function middleware(request) {
   const host = request.headers.get("host")?.split(":")[0]?.toLowerCase();
   if (host === "cms.surraa.com" && request.nextUrl.pathname === "/") {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/content/";
+    url.pathname = "/cms/";
     return NextResponse.redirect(url);
   }
   return NextResponse.next();

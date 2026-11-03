@@ -2,10 +2,14 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import { PageHero } from "@/components/ui";
 import { siteContent } from "@/lib/cms-site";
+import { cmsPage } from "@/lib/cms";
+import CmsPage from "@/components/CmsPage";
 
-export const metadata = { title: "About Us | SURRAA Community Association Kuwait", description: "SURRAA Community Association brings our community in Kuwait together through live music and events." };
+export function generateMetadata() { const page = cmsPage("about"); return page ? { title: page.title, description: page.description } : { title: "About Us | SURRAA Community Association Kuwait", description: "SURRAA Community Association brings our community in Kuwait together through live music and events." }; }
 
 export default function About() {
+  const page = cmsPage("about");
+  if (page) return <CmsPage page={page} />;
   const C = siteContent().company;
   return (
     <>

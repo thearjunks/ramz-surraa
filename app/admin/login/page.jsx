@@ -7,9 +7,10 @@ import { signIn } from "@/lib/actions";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin Sign In | SURRAA", robots: { index: false, follow: false } };
 
-export default async function AdminLogin() {
+export default async function AdminLogin({ searchParams }) {
+  const next = (await searchParams).next === "/cms/" ? "/cms/" : "/admin/";
   const u = await currentUser();
-  if (isStaff(u)) redirect("/admin/");
+  if (isStaff(u)) redirect(next);
   return (
     <div className="admin-login">
       <div className="card">
@@ -17,7 +18,7 @@ export default async function AdminLogin() {
         <h1 style={{ fontSize: 34, marginBottom: 6 }}>Admin sign in</h1>
         <p className="muted" style={{ marginBottom: 22 }}>SURRAA Community Association staff.</p>
         {u && !isStaff(u) && <div className="notice err" style={{ display: "block", marginBottom: 14 }}>You are signed in as a member. Sign in with a staff account.</div>}
-        <ActionForm action={signIn} submit="Sign in" hidden={{ next: "/admin/" }} fields={[
+        <ActionForm action={signIn} submit="Sign in" hidden={{ next }} fields={[
           { name: "username", label: "Username", required: true, autoComplete: "username", full: true },
           { name: "password", label: "Password", type: "password", required: true, autoComplete: "current-password", full: true },
         ]} />

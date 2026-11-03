@@ -1,11 +1,15 @@
 import { PageHero, ArtistCard } from "@/components/ui";
 import { siteContent } from "@/lib/cms-site";
+import { cmsPage } from "@/lib/cms";
+import CmsPage from "@/components/CmsPage";
 
-export const metadata = { title: "Artists | SURRAA Community Association Kuwait", description: "SURRAA artists and the guest artists of SUNDOWN – Chapter 1." };
+export function generateMetadata() { const page = cmsPage("artists"); return page ? { title: page.title, description: page.description } : { title: "Artists | SURRAA Community Association Kuwait", description: "SURRAA artists and the guest artists of SUNDOWN – Chapter 1." }; }
 
 const grid = { gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,190px),1fr))" };
 
 export default function Artists() {
+  const page = cmsPage("artists");
+  if (page) return <CmsPage page={page} />;
   const D = siteContent();
   const by = (g) => (D.artists || []).filter((a) => a.group === g).map((a) => <ArtistCard key={a.slug} a={a} />);
   return (

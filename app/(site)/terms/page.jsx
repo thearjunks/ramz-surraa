@@ -1,9 +1,13 @@
 import { PageHero } from "@/components/ui";
 import { DEFAULT_TERMS } from "@/lib/db";
+import { cmsPage } from "@/lib/cms";
+import CmsPage from "@/components/CmsPage";
 
-export const metadata = { title: "Terms & Conditions | SURRAA Community Association", description: "Terms for entry pass requests and use of this website." };
+export function generateMetadata() { const page = cmsPage("terms"); return page ? { title: page.title, description: page.description } : { title: "Terms & Conditions | SURRAA Community Association", description: "Terms for entry pass requests and use of this website." }; }
 
 export default function Terms() {
+  const page = cmsPage("terms");
+  if (page) return <CmsPage page={page} />;
   return (
     <>
       <PageHero crumb="Terms"><h1>Terms & conditions</h1></PageHero>

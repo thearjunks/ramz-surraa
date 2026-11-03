@@ -12,7 +12,7 @@ export default function AdminNav({ items }) {
       <button className="icon-btn admin-burger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}><Icon name={open ? "close" : "filter"} /></button>
       <nav className={"admin-nav" + (open ? " open" : "")} aria-label="Admin">
         {items.map(([t, h, i]) => {
-          const on = h === "/admin/" ? path === "/admin/" || path === "/admin" : path.startsWith(h);
+          const on = h === "/admin/" ? path === "/admin/" || path === "/admin" : path.startsWith(h) || (h === "/admin/content/" && path === "/cms/");
           return <Link key={h} href={h} aria-current={on ? "page" : undefined} onClick={() => setOpen(false)}><Icon name={i} />{t}</Link>;
         })}
       </nav>

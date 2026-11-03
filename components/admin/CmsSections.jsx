@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 const EMPTY = { type: "text", heading: "", body: "", image: "", buttonLabel: "", buttonHref: "", visible: true };
-const TYPES = [["hero", "Hero banner"], ["text", "Text"], ["image", "Image"], ["cta", "Call to action"]];
+const TYPES = [["hero", "Hero banner"], ["text", "Text"], ["image", "Image"], ["cta", "Call to action"], ["artists", "Artists"], ["gallery", "Gallery"], ["events", "Upcoming events"]];
 
 export default function CmsSections({ initial = [] }) {
   const [sections, setSections] = useState(initial);
