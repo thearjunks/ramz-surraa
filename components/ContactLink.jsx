@@ -1,3 +1,4 @@
+"use client";
 import Icon from "./Icon";
 import { C, tel } from "@/lib/site";
 import { useSiteContent } from "./SiteContentProvider";
