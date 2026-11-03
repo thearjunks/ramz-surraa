@@ -5,7 +5,7 @@ import { C, isEmail } from "@/lib/site";
 import { useSiteContent } from "./SiteContentProvider";
 
 // Shared form shell for the Contact and Sponsorship forms. Fields come in as children.
-// Sends to company.formEndpoint (e.g. Formspree) when set, otherwise opens the visitor's email app.
+// Sends enquiries to the site's server, which keeps a copy for staff.
 export default function EnquiryForm({ title, children }) {
   const company = useSiteContent()?.company || C;
   const form = useRef(null);
@@ -37,19 +37,13 @@ export default function EnquiryForm({ title, children }) {
     }
     const data = {};
     new FormData(el).forEach((v, k) => { if (k !== "website") data[k] = v; });
-    if (company.formEndpoint) {
-      try {
-        const r = await fetch(company.formEndpoint, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ _subject: title, ...data }) });
-        if (!r.ok) throw new Error(r.status);
-        setNote({ cls: "ok", text: "Thank you! Your message has been sent. We will get back to you soon." });
-        el.reset();
-      } catch {
-        setNote({ cls: "err", text: "Sorry, something went wrong. Please email " + company.email + " directly." });
-      }
-    } else {
-      const body = Object.keys(data).map((k) => k[0].toUpperCase() + k.slice(1) + ": " + data[k]).join("\n");
-      location.href = "mailto:" + company.email + "?subject=" + encodeURIComponent(title + (data.subject ? " – " + data.subject : "")) + "&body=" + encodeURIComponent(body);
-      setNote({ cls: "ok", text: "Your email app is opening with your message ready to send to " + company.email + "." });
+    try {
+      const r = await fetch("/api/contact/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title, ...data }) });
+      if (!r.ok) throw new Error(r.status);
+      setNote({ cls: "ok", text: "Thank you! Your message has been received. We will get back to you soon." });
+      el.reset();
+    } catch {
+      setNote({ cls: "err", text: "Sorry, your message could not be saved. Please email " + company.email + " directly." });
     }
   }
 
