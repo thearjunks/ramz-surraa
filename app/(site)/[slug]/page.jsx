@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import CmsPage from "@/components/CmsPage";
-import { cmsPage } from "@/lib/cms";
+import { cmsPage, cmsMetadata } from "@/lib/cms";
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   const page = cmsPage((await params).slug);
-  return page ? { title: page.title, description: page.description || undefined } : {};
+  return cmsMetadata(page);
 }
 export default async function CustomPage({ params, searchParams }) {
   const slug = (await params).slug;

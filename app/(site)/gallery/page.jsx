@@ -1,10 +1,10 @@
 import Gallery from "@/components/Gallery";
 import { PageHero } from "@/components/ui";
 import { siteContent } from "@/lib/cms-site";
-import { cmsPage } from "@/lib/cms";
+import { cmsPage, cmsMetadata } from "@/lib/cms";
 import CmsPage from "@/components/CmsPage";
 
-export function generateMetadata() { const page = cmsPage("gallery"); return page ? { title: page.title, description: page.description } : { title: "Gallery | SURRAA Community Association", description: "Photos of SURRAA artists and live performances." }; }
+export function generateMetadata() { const page = cmsPage("gallery"); return page ? cmsMetadata(page) : { title: "Gallery | SURRAA Community Association", description: "Photos of SURRAA artists and live performances." }; }
 
 export default function GalleryPage() {
   const page = cmsPage("gallery");

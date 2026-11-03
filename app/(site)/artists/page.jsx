@@ -1,9 +1,9 @@
 import { PageHero, ArtistCard } from "@/components/ui";
 import { siteContent } from "@/lib/cms-site";
-import { cmsPage } from "@/lib/cms";
+import { cmsPage, cmsMetadata } from "@/lib/cms";
 import CmsPage from "@/components/CmsPage";
 
-export function generateMetadata() { const page = cmsPage("artists"); return page ? { title: page.title, description: page.description } : { title: "Artists | SURRAA Community Association Kuwait", description: "SURRAA artists and the guest artists of SUNDOWN – Chapter 1." }; }
+export function generateMetadata() { const page = cmsPage("artists"); return page ? cmsMetadata(page) : { title: "Artists | SURRAA Community Association Kuwait", description: "SURRAA artists and the guest artists of SUNDOWN – Chapter 1." }; }
 
 const grid = { gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,190px),1fr))" };
 

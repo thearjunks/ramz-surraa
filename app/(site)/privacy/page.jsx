@@ -1,8 +1,8 @@
 import { PageHero } from "@/components/ui";
-import { cmsPage } from "@/lib/cms";
+import { cmsPage, cmsMetadata } from "@/lib/cms";
 import CmsPage from "@/components/CmsPage";
 
-export function generateMetadata() { const page = cmsPage("privacy"); return page ? { title: page.title, description: page.description } : { title: "Privacy Policy | SURRAA Community Association", description: "Privacy policy for the SURRAA Community Association website." }; }
+export function generateMetadata() { const page = cmsPage("privacy"); return page ? cmsMetadata(page) : { title: "Privacy Policy | SURRAA Community Association", description: "Privacy policy for the SURRAA Community Association website." }; }
 
 export default function Privacy() {
   const page = cmsPage("privacy");

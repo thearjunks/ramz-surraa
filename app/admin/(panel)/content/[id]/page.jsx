@@ -23,6 +23,9 @@ export default async function ContentEdit({ params, searchParams }) {
       { name: "slug", label: "Page URL", required: true, defaultValue: page?.slug, placeholder: "our-story", hint: "Lowercase letters, numbers and hyphens. Example: our-story → /our-story/" },
       { name: "status", label: "Status", type: "select", noEmpty: true, options: [["draft", "Draft"], ["published", "Published"]], defaultValue: page?.status || "draft" },
       { name: "description", label: "SEO description", type: "textarea", defaultValue: page?.description, full: true },
+      { name: "keywords", label: "SEO keywords", defaultValue: page?.keywords, full: true },
+      { name: "canonical_url", label: "Canonical URL", defaultValue: page?.canonical_url, full: true },
+      { name: "og_image", label: "Social sharing image URL", defaultValue: page?.og_image, full: true },
     ]}><CmsSections initial={sections} /></ActionForm></section>
     {!!revisions.length && <section className="a-card" style={{ marginTop: 18 }}><h2>Revision history</h2><ul className="a-hist">{revisions.map((r) => <li key={r.id}><span>{new Date(r.created_at).toLocaleString("en-GB")}</span><form action={restoreCmsRevision}><input type="hidden" name="revision_id" value={r.id} /><button className="btn btn-ghost btn-sm">Restore</button></form></li>)}</ul></section>}
   </>;
