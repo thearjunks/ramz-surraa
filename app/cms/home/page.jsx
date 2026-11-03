@@ -8,7 +8,8 @@ import { homeVersions } from "@/lib/home-cms";
 export default async function HomeEditor({ searchParams }) {
   await requirePerm("content");
   const versions = homeVersions();
-  const media = db.prepare("SELECT url, alt_text FROM cms_media WHERE mime LIKE 'image/%' ORDER BY id DESC LIMIT 200").all();
+  const media = db.prepare("SELECT url, alt_text FROM cms_media WHERE mime LIKE 'image/%' ORDER BY id DESC LIMIT 200").all()
+    .map((row) => ({ url: row.url, alt_text: row.alt_text }));
   const revisions = db.prepare("SELECT created_at FROM cms_home_revisions ORDER BY id DESC LIMIT 8").all();
   const sp = await searchParams;
   return <>
