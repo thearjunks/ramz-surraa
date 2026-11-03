@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from "./Icon";
+import { signOut } from "@/lib/actions";
 
 const NAV = [["Home", "/"], ["About", "/about/"], ["Events", "/events/"], ["Past Events", "/events/past/"], ["Gallery", "/gallery/"], ["Membership", "/membership/"], ["Contact", "/contact/"]];
 
@@ -36,7 +37,7 @@ export default function Header({ user, navigation = NAV, logo = "/images/surraa-
   useLayoutEffect(() => { setOpen(false); home(); }, [path, home]);
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; }, [open]);
 
-  const acct = user ? (user.staff ? ["/admin/", "Admin"] : ["/account/", "My account"]) : ["/sign-in/", "Sign in"];
+  const acct = user ? (user.staff ? (user.contentOnly ? ["/cms/", "CMS"] : ["/admin/", "Admin"]) : ["/account/", "My membership"]) : ["/sign-in/", "Member sign in"];
 
   return (
     <header ref={header} className={"site-header hdr3" + (scrolled ? " scrolled" : "")}>
@@ -59,16 +60,18 @@ export default function Header({ user, navigation = NAV, logo = "/images/surraa-
               ))}
               <li className="menu-mobile-only"><Link href="/account/passes/">My Entry Passes</Link></li>
               <li className="menu-mobile-only"><Link href="/track-entry-pass/">Track Entry Pass</Link></li>
-              <li className="menu-mobile-only"><Link href={acct[0]}>{user ? acct[1] : "Sign In / Register"}</Link></li>
+              <li className="menu-mobile-only"><Link href={acct[0]}>{user && !user.staff ? user.name : acct[1]}</Link></li>
+              {user && <li className="menu-mobile-only"><form action={signOut}><button type="submit" className="site-signout">Sign out</button></form></li>}
             </ul>
           </nav>
 
           <div className="nav-cta">
             <Link className="nav-chip nav-passes" href="/account/passes/"><Icon name="ticket" /><span>My Passes</span></Link>
-            <Link className="icon-btn nav-acct" href={acct[0]} title={acct[1]} aria-label={acct[1]}><Icon name="users" /></Link>
-            <Link className="btn-member" href="/membership/">
+            {user && !user.staff ? <details className="member-menu"><summary aria-label={`${user.name}, account menu`}><Icon name="users" /><span>{user.name}</span></summary><div className="member-menu-panel"><Link href="/account/">My membership</Link><Link href="/account/passes/">My passes</Link><form action={signOut}><button type="submit">Sign out</button></form></div></details>
+              : <Link className="nav-chip nav-acct" href={acct[0]} title={acct[1]} aria-label={acct[1]}><Icon name="users" /><span>{user ? "Admin" : "Member sign in"}</span></Link>}
+            {(!user || user.staff) && <Link className="btn-member" href="/membership/">
               <span className="bm-inner"><Icon name="star" /><span className="bm-txt">Get <em>Membership</em></span></span>
-            </Link>
+            </Link>}
             <button className="icon-btn burger" aria-label="Menu" aria-expanded={open} aria-controls="menu" onClick={() => setOpen(!open)}>
               <Icon name={open ? "close" : "filter"} />
             </button>

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import MediaField from "./MediaField";
 
 const GROUPS = [
   ["company", "Company & contact"], ["membership", "Membership"],
@@ -10,7 +11,7 @@ const LISTS = [
   ["gallery", null, "Gallery", { src: "", alt: "" }],
 ];
 
-export default function CmsSiteEditor({ initial }) {
+export default function CmsSiteEditor({ initial, media = [], cms = false }) {
   const [data, setData] = useState(initial);
   const setGroup = (group, key, value) => setData((d) => ({ ...d, [group]: { ...d[group], [key]: value } }));
   const updateList = (group, key, fn) => setData((d) => {
@@ -23,6 +24,7 @@ export default function CmsSiteEditor({ initial }) {
     {GROUPS.map(([group, title]) => <details key={group} className="a-card" style={{ marginBottom: 14 }} open={group === "company"}><summary><h2 style={{ display: "inline" }}>{title}</h2></summary><div className="form a-form3" style={{ marginTop: 16 }}>
       {Object.entries(data[group] || {}).map(([key, value]) => Array.isArray(value)
         ? <label key={key} className="field full">{key}<textarea className="input" rows="3" value={value.join("\n")} onChange={(e) => setGroup(group, key, e.target.value.split("\n").map((x) => x.trim()).filter(Boolean))} /></label>
+        : ["logo", "favicon", "ogImage"].includes(key) ? <MediaField key={key} label={key} value={String(value ?? "")} onChange={(next) => setGroup(group, key, next)} media={media} cms={cms} />
         : <label key={key} className="field">{key}<input className="input" value={String(value ?? "")} onChange={(e) => setGroup(group, key, e.target.value)} /></label>)}
     </div></details>)}
     {LISTS.map(([group, key, title, blank]) => {
@@ -32,7 +34,7 @@ export default function CmsSiteEditor({ initial }) {
           <button type="button" className="btn btn-ghost btn-sm" disabled={i === 0} onClick={() => updateList(group, key, (items) => { const x = [...items]; [x[i - 1], x[i]] = [x[i], x[i - 1]]; return x; })}>↑</button>
           <button type="button" className="btn btn-ghost btn-sm" disabled={i === list.length - 1} onClick={() => updateList(group, key, (items) => { const x = [...items]; [x[i + 1], x[i]] = [x[i], x[i + 1]]; return x; })}>↓</button>
           <button type="button" className="btn btn-ghost btn-sm" onClick={() => updateList(group, key, (items) => items.filter((_, n) => n !== i))}>Remove</button></div>
-          {Object.entries(item).map(([field, value]) => <label key={field} className="field">{field}<input className="input" value={String(value ?? "")} onChange={(e) => updateList(group, key, (items) => items.map((x, n) => n === i ? { ...x, [field]: e.target.value } : x))} /></label>)}
+          {Object.entries(item).map(([field, value]) => ["src", "photo"].includes(field) ? <MediaField key={field} label={field} value={String(value ?? "")} onChange={(next) => updateList(group, key, (items) => items.map((x, n) => n === i ? { ...x, [field]: next } : x))} media={media} cms={cms} /> : <label key={field} className="field">{field}<input className="input" value={String(value ?? "")} onChange={(e) => updateList(group, key, (items) => items.map((x, n) => n === i ? { ...x, [field]: e.target.value } : x))} /></label>)}
         </div>)}
         <button type="button" className="btn btn-ghost" style={{ marginTop: 14 }} onClick={() => updateList(group, key, (items) => [...items, { ...blank }])}>+ Add {title.toLowerCase()}</button>
       </details>;

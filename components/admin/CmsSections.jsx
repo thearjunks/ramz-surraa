@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
+import MediaField from "./MediaField";
 
 const EMPTY = { type: "text", heading: "", body: "", image: "", buttonLabel: "", buttonHref: "", visible: true };
 const TYPES = [["hero", "Hero banner"], ["text", "Text"], ["image", "Image"], ["cta", "Call to action"], ["artists", "Artists"], ["gallery", "Gallery"], ["events", "Upcoming events"]];
 
-export default function CmsSections({ initial = [] }) {
+export default function CmsSections({ initial = [], media = [], cms = false }) {
   const [sections, setSections] = useState(initial);
   const change = (i, key, value) => setSections((list) => list.map((s, n) => n === i ? { ...s, [key]: value } : s));
   const move = (i, by) => setSections((list) => {
@@ -28,7 +29,7 @@ export default function CmsSections({ initial = [] }) {
       <label className="field"><input type="checkbox" checked={s.visible !== false} onChange={(e) => change(i, "visible", e.target.checked)} /> Show this section on the website</label>
       <label className="field">Heading<input className="input" value={s.heading || ""} onChange={(e) => change(i, "heading", e.target.value)} /></label>
       <label className="field">Text<textarea className="input" rows="4" value={s.body || ""} onChange={(e) => change(i, "body", e.target.value)} /></label>
-      {(s.type === "hero" || s.type === "image") && <label className="field">Image URL<input className="input" value={s.image || ""} placeholder="/images/photo.jpg" onChange={(e) => change(i, "image", e.target.value)} /></label>}
+      {(s.type === "hero" || s.type === "image") && <MediaField label="Image" value={s.image || ""} onChange={(value) => change(i, "image", value)} media={media} cms={cms} />}
       {(s.type === "hero" || s.type === "cta") && <><label className="field">Button label<input className="input" value={s.buttonLabel || ""} onChange={(e) => change(i, "buttonLabel", e.target.value)} /></label><label className="field">Button link<input className="input" value={s.buttonHref || ""} placeholder="/events/" onChange={(e) => change(i, "buttonHref", e.target.value)} /></label></>}
     </section>)}
     <button type="button" className="btn btn-ghost" onClick={() => setSections((list) => [...list, { ...EMPTY }])}>+ Add section</button>

@@ -13,7 +13,7 @@ export default async function SiteLayout({ children }) {
   const content = siteContent();
   return (
     <SiteContentProvider value={content}>
-      <Header user={u ? { name: u.name, staff: u.role !== "member" } : null} navigation={navigation} logo={content.company.logo} />
+      <Header user={u ? { name: u.name, staff: u.role !== "member", contentOnly: ["editor", "content_manager"].includes(u.role) } : null} navigation={navigation} logo={content.company.logo} />
       <main id="main">{children}</main>
       <Footer navigation={footerNavigation} />
       <Reveal />

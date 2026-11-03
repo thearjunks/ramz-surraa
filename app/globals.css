@@ -631,6 +631,19 @@ img{height:auto}
 .admin-me small{color:var(--muted);font-size:12px}
 .admin-burger{display:none}
 .admin-main{padding:28px clamp(16px,3vw,40px) 60px;min-width:0}
+.cms-workspace{background:#101513}.cms-workspace .admin-side{background:#171e1a;border-right-color:#334039}
+.cms-workspace .admin-nav a[aria-current="page"]{background:#d9ec3b;color:#101513}
+.cms-side-label{margin:10px 12px 0;color:#98aa9a;font-size:11px;font-weight:800;letter-spacing:.17em}
+.cms-topline{display:flex;justify-content:space-between;gap:12px;padding-bottom:18px;margin-bottom:22px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.cms-topline a{color:var(--lime)}.cms-media-field{display:grid;gap:8px}.cms-media-field label{display:grid;gap:7px}
+.cms-media-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.cms-media-tools .input{flex:1;min-width:170px}
+.cms-media-preview{width:min(220px,100%);height:130px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.member-menu{position:relative}.member-menu summary{display:flex;align-items:center;gap:7px;max-width:175px;cursor:pointer;list-style:none;padding:9px 12px;border:1px solid var(--line2);border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.member-menu summary::-webkit-details-marker{display:none}.member-menu summary span{overflow:hidden;text-overflow:ellipsis}.member-menu summary svg{width:17px;flex:none}
+.member-menu-panel{position:absolute;right:0;top:calc(100% + 8px);z-index:100;min-width:190px;padding:8px;background:var(--char);border:1px solid var(--line2);border-radius:12px;box-shadow:0 18px 40px #0008}
+.member-menu-panel a,.member-menu-panel button{display:block;width:100%;padding:10px 12px;background:none;border:0;border-radius:7px;color:var(--text);font:inherit;font-size:13px;text-align:left;cursor:pointer}.member-menu-panel a:hover,.member-menu-panel button:hover{background:rgba(255,255,255,.08)}
+.site-signout{background:none;border:0;color:var(--text);padding:10px 16px;font:inherit;cursor:pointer}
+@media(max-width:1080px){.member-menu{display:none}}
 @media(max-width:900px){
   .admin{grid-template-columns:1fr}
   .admin-side{position:sticky;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px 16px;z-index:50}
@@ -756,7 +769,7 @@ details.a-card summary{cursor:pointer;list-style:none}
 .nav-chip{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s,background .2s}
 .nav-chip:hover{color:var(--text);background:rgba(255,255,255,.06)}
 .nav-chip svg{width:17px;height:17px}
-.nav-acct{width:44px;height:44px}
+.nav-acct{width:auto;height:44px;padding:0 12px}
 
 /* Get Membership — rotating festival-light border, shine sweep, fills on hover */
 @property --bm{syntax:"<angle>";initial-value:0deg;inherits:false}
@@ -779,6 +792,7 @@ details.a-card summary{cursor:pointer;list-style:none}
 .btn-member:hover .bm-inner svg{color:#0A0D0A}
 
 @media(max-width:1300px) and (min-width:1081px){.nav-chip span{display:none}.nav-chip{width:44px;padding:0;justify-content:center}}
+@media(max-width:1300px) and (min-width:1081px){.nav-acct span{display:inline}.nav-acct{width:auto;padding:0 10px}}
 @media(max-width:1080px){
   .nav-capsule{height:62px;padding:0 8px 0 16px}
   .hdr3 .menu .spot,.hdr3 .menu .eq{display:none}

@@ -1,13 +1,17 @@
 import { Head, Stat, Bars, Meters, kd } from "@/components/admin/ui";
 import { db } from "@/lib/db";
 import { requirePerm, can } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { eventStats, eventEnd, sweepExpired } from "@/lib/bookings";
 import { verifyPassword } from "@/lib/security";
 import Link from "next/link";
 
 export default async function Dashboard({ searchParams }) {
   const u = await requirePerm(null);
-  if (!can(u, "dashboard")) return <Head title="Welcome" sub="Use QR Check-in from the menu." />;
+  if (!can(u, "dashboard")) {
+    if (can(u, "content")) redirect("/cms/");
+    return <Head title="Welcome" sub="Use QR Check-in from the menu." />;
+  }
   sweepExpired();
   const q = (sql, ...a) => db.prepare(sql).get(...a);
   const events = db.prepare("SELECT * FROM events WHERE status != 'draft' ORDER BY date").all();
