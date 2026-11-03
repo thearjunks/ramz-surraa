@@ -9,6 +9,7 @@ export const metadata = { title: "Admin | SURRAA Community Association", robots:
 
 const ITEMS = [
   ["Dashboard", "/admin/", "star", "dashboard"], ["Bookings", "/admin/bookings/", "ticket", "bookings.view"], ["Events", "/admin/events/", "cal", "events"],
+  ["Content", "/admin/content/", "screen", "content"],
   ["Users & Members", "/admin/users/", "users", "users"], ["QR Check-in", "/admin/checkin/", "camera", "checkin"], ["Reports", "/admin/reports/", "sliders", "reports"],
   ["Settings", "/admin/settings/", "screen", "settings"], ["Audit Log", "/admin/audit/", "search", "audit"],
 ];

@@ -5,7 +5,7 @@ import Icon from "./Icon";
 import ContactLink from "./ContactLink";
 import { C } from "@/lib/site";
 
-export default function Footer() {
+export default function Footer({ navigation }) {
   const [top, setTop] = useState(false);
   useEffect(() => {
     const f = () => setTop(window.scrollY > 700);
@@ -23,8 +23,7 @@ export default function Footer() {
               <p className="muted" style={{ maxWidth: "36ch" }}>{C.name}, {C.location}. {C.tagline}</p>
             </div>
             <div><h4>Explore</h4><ul>
-              <li><Link href="/events/">Upcoming Events</Link></li><li><Link href="/membership/">Membership</Link></li>
-              <li><Link href="/track-entry-pass/">Track Entry Pass</Link></li><li><Link href="/gallery/">Gallery</Link></li><li><Link href="/contact/">Contact</Link></li></ul></div>
+              {(navigation || [["Upcoming Events", "/events/"], ["Membership", "/membership/"], ["Track Entry Pass", "/track-entry-pass/"], ["Gallery", "/gallery/"], ["Contact", "/contact/"]]).map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul></div>
             <div><h4>Contact</h4><ul>
               <li><ContactLink k="email" /></li><li><ContactLink k="phone" /></li>
               <li style={{ display: "flex", gap: 10, marginTop: 8 }}>

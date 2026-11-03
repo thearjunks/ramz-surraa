@@ -8,7 +8,7 @@ const NAV = [["Home", "/"], ["About", "/about/"], ["Events", "/events/"], ["Past
 
 // Floating glass "capsule" header. A soft spotlight glides under the link you point at
 // and settles back on the current page; the current page shows a tiny live equalizer.
-export default function Header({ user }) {
+export default function Header({ user, navigation = NAV }) {
   const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,7 +50,7 @@ export default function Header({ user }) {
           <nav aria-label="Main">
             <ul ref={menu} className={"menu" + (open ? " open" : "")} id="menu" onMouseLeave={home}>
               <li className="spot" aria-hidden="true" style={{ transform: `translateX(${spot.x}px)`, width: spot.w, opacity: spot.on ? 1 : 0 }} />
-              {NAV.map(([t, u]) => (
+              {navigation.map(([t, u]) => (
                 <li key={u}>
                   <Link href={u} aria-current={cur(u)} onMouseEnter={(e) => moveTo(e.currentTarget)} onFocus={(e) => moveTo(e.currentTarget)}>
                     {cur(u) && <i className="eq" aria-hidden="true"><b /><b /><b /></i>}{t}
