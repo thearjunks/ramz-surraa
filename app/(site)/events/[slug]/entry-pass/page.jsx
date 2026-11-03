@@ -4,7 +4,8 @@ import Icon from "@/components/Icon";
 import ActionForm from "@/components/ActionForm";
 import { Crumbs } from "@/components/ui";
 import { noindex } from "@/components/blocks";
-import { src, D } from "@/lib/site";
+import { src } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 import { currentUser, siteUrl } from "@/lib/auth";
 import { getEvent, view, eventStats } from "@/lib/bookings";
 import { requestEntryPass } from "@/lib/actions";
@@ -18,7 +19,7 @@ export default async function RequestPass({ params }) {
   const e = view(raw);
   const user = await currentUser();
   const max = Math.max(1, Math.min(e.max_per_booking, eventStats(e.id).available));
-  const M = D.membership || {};
+  const M = siteContent().membership || {};
 
   const fields = [
     { name: "name", label: "Full name", required: true, autoComplete: "name", full: true, defaultValue: user?.name },

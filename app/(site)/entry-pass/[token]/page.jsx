@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import QRCode from "qrcode";
 import Icon from "@/components/Icon";
 import { Timeline, noindex } from "@/components/blocks";
-import { C, src } from "@/lib/site";
+import { src } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 import { db } from "@/lib/db";
 import { STATUS, fmtDT, fmtDate, fmtTime, eventStart, passesFor } from "@/lib/bookings";
 
@@ -13,6 +14,7 @@ export const metadata = { title: "Your Entry Pass | SURRAA Community Association
 // The access token in the URL is a 192-bit secret given only to the person who made the request
 // (after submitting, via tracking verification, or in their account).
 export default async function EntryPass({ params, searchParams }) {
+  const C = siteContent().company;
   const b = db.prepare("SELECT * FROM bookings WHERE access_token = ?").get((await params).token);
   if (!b) notFound();
   const e = db.prepare("SELECT * FROM events WHERE id = ?").get(b.event_id);

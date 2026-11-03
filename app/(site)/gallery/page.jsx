@@ -1,10 +1,11 @@
 import Gallery from "@/components/Gallery";
 import { PageHero } from "@/components/ui";
-import { D } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 
 export const metadata = { title: "Gallery | SURRAA Community Association", description: "Photos of SURRAA artists and live performances." };
 
 export default function GalleryPage() {
+  const D = siteContent();
   return (
     <>
       <PageHero crumb="Gallery"><h1><span className="grad">Gallery</span></h1></PageHero>

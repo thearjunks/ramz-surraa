@@ -3,7 +3,7 @@ import Icon from "@/components/Icon";
 import ActionForm from "@/components/ActionForm";
 import { PageHero } from "@/components/ui";
 import { noindex } from "@/components/blocks";
-import { D } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { fmtDT } from "@/lib/bookings";
@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "My Account | SURRAA Community Association", ...noindex };
 
 export default async function Account({ searchParams }) {
+  const D = siteContent();
   const u = await requireUser("/account/");
   const q = await searchParams;
   const cat = u.category_id ? db.prepare("SELECT * FROM membership_categories WHERE id = ?").get(u.category_id) : null;

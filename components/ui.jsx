@@ -1,7 +1,8 @@
 // Small shared building blocks (server components).
 import Link from "next/link";
 import Icon from "./Icon";
-import { M, src, status } from "@/lib/site";
+import { src, status } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 
 export function PageHero({ crumb, children, lead }) {
   return (
@@ -46,10 +47,11 @@ export function StatusPill({ e }) {
 
 export const lcFirst = (s = "") => s.charAt(0).toLowerCase() + s.slice(1);
 
-export const feeText = () => (M.fee ? `${M.fee}${M.period ? " " + M.period : ""}` : "Shared on WhatsApp");
+export const feeText = () => { const M = siteContent().membership; return M.fee ? `${M.fee}${M.period ? " " + M.period : ""}` : "Shared on WhatsApp"; };
 
 // The 3-step "how membership works" strip, used on Home and Join
 export function Steps({ col }) {
+  const M = siteContent().membership;
   const s = [
     ["01", "Register", "Fill in the short form — name, WhatsApp, nationality and area."],
     ["02", "Pay the fee", M.fee ? `Membership fee ${feeText()}. We send payment details on WhatsApp.` : "We contact you on WhatsApp with the fee and payment details."],

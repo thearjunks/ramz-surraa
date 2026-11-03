@@ -4,12 +4,16 @@ import Countdown from "@/components/Countdown";
 import HeroStage from "@/components/HeroStage";
 import { ArtistCard } from "@/components/ui";
 import { PassButton } from "@/components/blocks";
-import { C, D, src, artistBy } from "@/lib/site";
+import { src } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 import { publicEvents, view } from "@/lib/bookings";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
+  const D = siteContent();
+  const C = D.company;
+  const artistBy = (slug) => (D.artists || []).find((a) => a.slug === slug);
   const e = publicEvents().map(view)[0];
   const lineup = e ? e.lineupArr.map(artistBy).filter(Boolean) : [];
   const jsonLd = { "@context": "https://schema.org", "@type": "Organization", name: C.name, url: C.website, logo: C.website + "/images/surraa-logo.png", email: C.email, telephone: C.phone, address: { "@type": "PostalAddress", addressCountry: "KW" } };

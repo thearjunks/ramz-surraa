@@ -8,7 +8,7 @@ const NAV = [["Home", "/"], ["About", "/about/"], ["Events", "/events/"], ["Past
 
 // Floating glass "capsule" header. A soft spotlight glides under the link you point at
 // and settles back on the current page; the current page shows a tiny live equalizer.
-export default function Header({ user, navigation = NAV }) {
+export default function Header({ user, navigation = NAV, logo = "/images/surraa-logo.png" }) {
   const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function Header({ user, navigation = NAV }) {
       <div className="wrap">
         <div className="nav nav-capsule">
           <Link className="brand brand3" href="/" aria-label="SURRAA Community Association home">
-            <img src="/images/surraa-logo.png" alt="" width="86" height="40" />
+            <img src={logo} alt="" width="86" height="40" />
             <span className="brand3-tag">Community<br />Association</span>
           </Link>
 

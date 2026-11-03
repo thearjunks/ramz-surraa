@@ -1,11 +1,12 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import { PageHero } from "@/components/ui";
-import { C } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 
 export const metadata = { title: "About Us | SURRAA Community Association Kuwait", description: "SURRAA Community Association brings our community in Kuwait together through live music and events." };
 
 export default function About() {
+  const C = siteContent().company;
   return (
     <>
       <PageHero crumb="About" lead={C.tagline}><h1>About <span className="grad">SURRAA</span></h1></PageHero>

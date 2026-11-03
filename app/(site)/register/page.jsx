@@ -2,12 +2,13 @@ import Link from "next/link";
 import ActionForm from "@/components/ActionForm";
 import { PageHero } from "@/components/ui";
 import { noindex } from "@/components/blocks";
-import { D } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 import { register } from "@/lib/actions";
 
 export const metadata = { title: "Create Account | SURRAA Community Association", ...noindex };
 
 export default async function Register({ searchParams }) {
+  const D = siteContent();
   const next = (await searchParams).next || "";
   return (
     <>

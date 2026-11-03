@@ -2,11 +2,12 @@ import Icon from "@/components/Icon";
 import ContactLink from "@/components/ContactLink";
 import EnquiryForm, { Field } from "@/components/EnquiryForm";
 import { PageHero } from "@/components/ui";
-import { C } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 
 export const metadata = { title: "Contact | SURRAA Community Association Kuwait", description: "Contact SURRAA Community Association in Kuwait." };
 
 export default function Contact() {
+  const C = siteContent().company;
   return (
     <>
       <PageHero crumb="Contact"><h1>Contact <span className="grad">us</span></h1></PageHero>

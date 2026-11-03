@@ -5,7 +5,8 @@ import Gallery from "@/components/Gallery";
 import { StickyPad } from "@/components/EventClient";
 import { Crumbs, ArtistCard } from "@/components/ui";
 import { PassButton } from "@/components/blocks";
-import { C, D, src, artistBy } from "@/lib/site";
+import { src } from "@/lib/site";
+import { siteContent } from "@/lib/cms-site";
 import { getEvent, view, gcal } from "@/lib/bookings";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,9 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function EventPage({ params }) {
+  const D = siteContent();
+  const C = D.company;
+  const artistBy = (slug) => (D.artists || []).find((a) => a.slug === slug);
   const e = await load(params);
   if (!e) notFound();
   const lineup = e.lineupArr.map(artistBy).filter(Boolean);

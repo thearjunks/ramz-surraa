@@ -6,8 +6,8 @@ official passes with QR codes, QR check-in, internal payments, reports (Excel / 
 ## Start it
 1. Install **Node.js 22 or newer** (LTS) from https://nodejs.org — once.
 2. Double-click **`start the website.cmd`** (first run installs packages, 1–2 min).
-3. Website: **http://localhost:43678** · Admin: **http://localhost:43678/admin/**
-   First visit to /admin asks you to create the administrator account.
+3. Website: **http://localhost:43678** · CMS: **http://localhost:43678/cms/** · Admin: **http://localhost:43678/admin/**.
+   On a new database, set `SURRAA_BOOTSTRAP_PASSWORD` (at least 12 characters) before the first start to create the owner account. Existing databases keep their current owner account.
 
 Only one site can use port 43678 — close any other "start the website" window first.
 
@@ -32,8 +32,11 @@ Admin → Settings: admin number (default 96566247474) and optional WhatsApp Bus
 Without a token, each new request appears in the log with a one-click "Send manually" link.
 
 ## Edit content
-`data/site.js` — contact details, artists, gallery. Events are managed in Admin → Events.
+Use **CMS → Content** to manage custom pages, page sections, navigation, media, and the company, membership, artist, gallery and banner content. Use **Admin → Events** for events. Drafts stay off the public site until published. The CMS currently does not control every label and layout on the existing site.
 
 ## Going live
-Needs Node.js hosting (VPS, Railway, Render, or cPanel "Setup Node.js App"): `npm install`, `npm run build`, `npm start`.
-Use HTTPS. Copy the `data` folder with the site.
+Needs Node.js 22.13+ hosting: `npm install`, `npm run build`, `npm start`. Use HTTPS.
+
+Set `SURRAA_DATA_DIR` to an **absolute, persistent directory outside any deployment build folder**. The SQLite database, Civil ID encryption key and uploaded media live there. Back up the entire directory together. Never put it in Git or inside Hostinger's `hbuilds/` or `public_html` deployment folders, because Hostinger replaces those on redeploy. Migrating an existing installation requires copying its `data/surraa.db`, `data/secret.key`, and uploaded files to the persistent directory before switching the variable.
+
+`/cms/` is the separate CMS entry URL on the same application. If `cms.surraa.com` is routed to this same Node.js instance, its root redirects to the CMS. Do not deploy a second independent copy of this SQLite app for the subdomain; the two copies would have different data. The domain and subdomain must share one backend and persistent data directory.

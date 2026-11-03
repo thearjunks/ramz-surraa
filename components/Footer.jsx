@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import ContactLink from "./ContactLink";
 import { C } from "@/lib/site";
+import { useSiteContent } from "./SiteContentProvider";
 
 export default function Footer({ navigation }) {
+  const company = useSiteContent()?.company || C;
   const [top, setTop] = useState(false);
   useEffect(() => {
     const f = () => setTop(window.scrollY > 700);
@@ -19,8 +21,8 @@ export default function Footer({ navigation }) {
         <div className="wrap">
           <div className="foot-grid foot-simple">
             <div>
-              <img src="/images/surraa-logo.png" alt="SURRAA" width="130" height="61" style={{ height: 52, width: "auto", marginBottom: 14 }} />
-              <p className="muted" style={{ maxWidth: "36ch" }}>{C.name}, {C.location}. {C.tagline}</p>
+              <img src={company.logo || "/images/surraa-logo.png"} alt="SURRAA" width="130" height="61" style={{ height: 52, width: "auto", marginBottom: 14 }} />
+              <p className="muted" style={{ maxWidth: "36ch" }}>{company.name}, {company.location}. {company.tagline}</p>
             </div>
             <div><h4>Explore</h4><ul>
               {(navigation || [["Upcoming Events", "/events/"], ["Membership", "/membership/"], ["Track Entry Pass", "/track-entry-pass/"], ["Gallery", "/gallery/"], ["Contact", "/contact/"]]).map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul></div>
@@ -31,7 +33,7 @@ export default function Footer({ navigation }) {
                 <ContactLink className="icon-btn" k="tiktok" external hideEmpty aria-label="TikTok"><Icon name="tiktok" /></ContactLink>
               </li></ul></div>
           </div>
-          <div className="foot-bottom"><span>© {new Date().getFullYear()} {C.name} · {C.location}</span><span style={{ display: "flex", gap: 18 }}><Link href="/terms/">Terms</Link><Link href="/privacy/">Privacy</Link></span></div>
+          <div className="foot-bottom"><span>© {new Date().getFullYear()} {company.name} · {company.location}</span><span style={{ display: "flex", gap: 18 }}><Link href="/terms/">Terms</Link><Link href="/privacy/">Privacy</Link></span></div>
         </div>
       </footer>
       <button className={"icon-btn to-top" + (top ? " show" : "")} aria-label="Back to top" style={{ background: "var(--card2)" }}

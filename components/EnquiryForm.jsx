@@ -2,10 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import { C, isEmail } from "@/lib/site";
+import { useSiteContent } from "./SiteContentProvider";
 
 // Shared form shell for the Contact and Sponsorship forms. Fields come in as children.
 // Sends to company.formEndpoint (e.g. Formspree) when set, otherwise opens the visitor's email app.
 export default function EnquiryForm({ title, children }) {
+  const company = useSiteContent()?.company || C;
   const form = useRef(null);
   const [note, setNote] = useState({ cls: "", text: "" });
 
@@ -35,19 +37,19 @@ export default function EnquiryForm({ title, children }) {
     }
     const data = {};
     new FormData(el).forEach((v, k) => { if (k !== "website") data[k] = v; });
-    if (C.formEndpoint) {
+    if (company.formEndpoint) {
       try {
-        const r = await fetch(C.formEndpoint, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ _subject: title, ...data }) });
+        const r = await fetch(company.formEndpoint, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ _subject: title, ...data }) });
         if (!r.ok) throw new Error(r.status);
         setNote({ cls: "ok", text: "Thank you! Your message has been sent. We will get back to you soon." });
         el.reset();
       } catch {
-        setNote({ cls: "err", text: "Sorry, something went wrong. Please email " + C.email + " directly." });
+        setNote({ cls: "err", text: "Sorry, something went wrong. Please email " + company.email + " directly." });
       }
     } else {
       const body = Object.keys(data).map((k) => k[0].toUpperCase() + k.slice(1) + ": " + data[k]).join("\n");
-      location.href = "mailto:" + C.email + "?subject=" + encodeURIComponent(title + (data.subject ? " – " + data.subject : "")) + "&body=" + encodeURIComponent(body);
-      setNote({ cls: "ok", text: "Your email app is opening with your message ready to send to " + C.email + "." });
+      location.href = "mailto:" + company.email + "?subject=" + encodeURIComponent(title + (data.subject ? " – " + data.subject : "")) + "&body=" + encodeURIComponent(body);
+      setNote({ cls: "ok", text: "Your email app is opening with your message ready to send to " + company.email + "." });
     }
   }
 
@@ -55,7 +57,7 @@ export default function EnquiryForm({ title, children }) {
     <form ref={form} className="form" noValidate onSubmit={submit}>
       {children}
       <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-      <div className="field full"><label className="consent" style={{ fontSize: 13 }}><input type="checkbox" name="consent" required /> I agree that {C.name} may use these details to reply to my enquiry. *</label><p className="err-msg">Please tick to continue.</p></div>
+      <div className="field full"><label className="consent" style={{ fontSize: 13 }}><input type="checkbox" name="consent" required /> I agree that {company.name} may use these details to reply to my enquiry. *</label><p className="err-msg">Please tick to continue.</p></div>
       <div className="full"><button className="btn btn-primary" type="submit">Send message <Icon name="arrow" /></button></div>
       <div className={"notice full " + (note.cls ? note.cls : "")} role="status" aria-live="polite">{note.text}</div>
     </form>
