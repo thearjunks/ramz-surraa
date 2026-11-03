@@ -8,7 +8,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "CMS | SURRAA", robots: { index: false, follow: false } };
 
 const items = [
-  ["Pages", "/cms/", "screen"],
+  ["Overview", "/cms/", "star"],
+  ["Pages", "/cms/pages/", "screen"],
+  ["Components", "/cms/components/", "sliders"],
   ["Site content", "/cms/site/", "star"],
   ["Media library", "/cms/media/", "camera"],
   ["Navigation", "/cms/navigation/", "sliders"],

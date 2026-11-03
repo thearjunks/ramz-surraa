@@ -9,7 +9,6 @@ export const metadata = { title: "Admin | SURRAA Community Association", robots:
 
 const ITEMS = [
   ["Dashboard", "/admin/", "star", "dashboard"], ["Bookings", "/admin/bookings/", "ticket", "bookings.view"], ["Events", "/admin/events/", "cal", "events"],
-  ["Content", "/admin/content/", "screen", "content"],
   ["Contact messages", "/admin/messages/", "mail", "settings"],
   ["Members", "/admin/members/", "users", "users"], ["Users", "/admin/users/", "users", "users"], ["QR Check-in", "/admin/checkin/", "camera", "checkin"], ["Reports", "/admin/reports/", "sliders", "reports"],
   ["Settings", "/admin/settings/", "screen", "settings"], ["Audit Log", "/admin/audit/", "search", "audit"],
@@ -26,6 +25,7 @@ export default async function AdminLayout({ children }) {
         <div className="admin-me">
           <b>{u.name}</b><small>{ROLES[u.role]}</small>
           <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+            {can(u, "content") && <Link className="btn btn-ghost btn-sm" href="/cms/">CMS</Link>}
             <Link className="btn btn-ghost btn-sm" href="/" target="_blank"><Icon name="globe" />Site</Link>
             <form action={signOut}><button className="btn btn-ghost btn-sm">Sign out</button></form>
           </div>

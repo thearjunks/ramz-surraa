@@ -15,6 +15,7 @@ export default async function ContentEdit({ params, searchParams, cms = false })
   const sections = page ? JSON.parse(page.sections) : [];
   const revisions = page ? db.prepare("SELECT id, created_at FROM cms_revisions WHERE page_id = ? ORDER BY id DESC LIMIT 10").all(page.id) : [];
   const media = db.prepare("SELECT url, alt_text FROM cms_media WHERE mime LIKE 'image/%' ORDER BY id DESC LIMIT 100").all();
+  const components = db.prepare("SELECT id, name FROM cms_components ORDER BY name").all();
   return <>
     <Head title={page ? `Edit ${page.title}` : "New page"} sub="Edit, preview and publish reusable page sections."><Link className="btn btn-ghost" href={cms ? "/cms/" : "/admin/content/"}>← Pages</Link><Link className="btn btn-ghost" href={cms ? "/cms/media/" : "/admin/content/media/"}>Upload images</Link>{page && <Link className="btn btn-ghost" href={`/cms/preview/${page.slug}/`} target="_blank">Preview ↗</Link>}</Head>
     {(await searchParams).saved && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Page saved.</div>}
@@ -27,7 +28,7 @@ export default async function ContentEdit({ params, searchParams, cms = false })
       { name: "keywords", label: "SEO keywords", defaultValue: page?.keywords, full: true },
       { name: "canonical_url", label: "Canonical URL", defaultValue: page?.canonical_url, full: true },
       { name: "og_image", label: "Social sharing image URL", defaultValue: page?.og_image, full: true },
-    ]}><CmsSections initial={sections} media={media} cms={cms} /></ActionForm></section>
+    ]}><CmsSections initial={sections} media={media} components={components} cms={cms} /></ActionForm></section>
     {!!revisions.length && <section className="a-card" style={{ marginTop: 18 }}><h2>Revision history</h2><ul className="a-hist">{revisions.map((r) => <li key={r.id}><span>{new Date(r.created_at).toLocaleString("en-GB")}</span><form action={restoreCmsRevision}><input type="hidden" name="revision_id" value={r.id} /><input type="hidden" name="cms" value={cms ? "1" : "0"} /><button className="btn btn-ghost btn-sm">Restore</button></form></li>)}</ul></section>}
   </>;
 }

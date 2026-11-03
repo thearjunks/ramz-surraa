@@ -2,6 +2,7 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import { PageHero } from "@/components/ui";
 import { currentUser } from "@/lib/auth";
+import CmsPageExtras from "@/components/CmsPageExtras";
 
 export const metadata = { title: "Membership | SURRAA Community Association Kuwait", description: "Create a free SURRAA member account: faster entry pass requests, digital membership ID and your pass history." };
 
@@ -26,6 +27,7 @@ export default async function Membership() {
             : <><Link className="btn btn-primary" href="/register/"><Icon name="users" />Create free account</Link><Link className="btn btn-ghost" href="/sign-in/">Sign in</Link></>}</div>
         </div>
       </div></section>
+      <CmsPageExtras slug="membership" />
     </>
   );
 }

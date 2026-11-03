@@ -4,6 +4,7 @@ import { PageHero } from "@/components/ui";
 import { siteContent } from "@/lib/cms-site";
 import { cmsPage, cmsMetadata } from "@/lib/cms";
 import CmsPage from "@/components/CmsPage";
+import CmsPageExtras from "@/components/CmsPageExtras";
 
 export function generateMetadata() { const page = cmsPage("about"); return page ? cmsMetadata(page) : { title: "About Us | SURRAA Community Association Kuwait", description: "SURRAA Community Association brings our community in Kuwait together through live music and events." }; }
 
@@ -24,6 +25,7 @@ export default function About() {
         </div>
         <div className="photo-stack reveal"><img src="/images/g-ambika-mono.jpg" alt="Ambika Rajesh in concert" loading="lazy" /><img src="/images/g-ramz-live.jpg" alt="RAMZ RMZN live" loading="lazy" /></div>
       </div></section>
+      <CmsPageExtras slug="about" />
     </>
   );
 }

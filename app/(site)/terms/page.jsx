@@ -2,6 +2,7 @@ import { PageHero } from "@/components/ui";
 import { DEFAULT_TERMS } from "@/lib/db";
 import { cmsPage, cmsMetadata } from "@/lib/cms";
 import CmsPage from "@/components/CmsPage";
+import CmsPageExtras from "@/components/CmsPageExtras";
 
 export function generateMetadata() { const page = cmsPage("terms"); return page ? cmsMetadata(page) : { title: "Terms & Conditions | SURRAA Community Association", description: "Terms for entry pass requests and use of this website." }; }
 
@@ -19,6 +20,7 @@ export default function Terms() {
         <h2>Event information</h2><p>Line-ups, times and venues may change. The latest information is published on this website.</p>
         <h2>Contact</h2><p><a href="mailto:info@surraa.com">info@surraa.com</a></p>
       </div></section>
+      <CmsPageExtras slug="terms" />
     </>
   );
 }

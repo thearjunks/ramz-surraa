@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/ui";
 import { cmsPage, cmsMetadata } from "@/lib/cms";
 import CmsPage from "@/components/CmsPage";
+import CmsPageExtras from "@/components/CmsPageExtras";
 
 export function generateMetadata() { const page = cmsPage("privacy"); return page ? cmsMetadata(page) : { title: "Privacy Policy | SURRAA Community Association", description: "Privacy policy for the SURRAA Community Association website." }; }
 
@@ -19,6 +20,7 @@ export default function Privacy() {
         <h2>Retention & your rights</h2><p>We keep request data only as long as needed for the event and legitimate records, and delete Civil ID numbers when they are no longer required. You can ask us to access, correct or delete your information, or unsubscribe at any time, by emailing <a href="mailto:info@surraa.com">info@surraa.com</a>.</p>
         <h2>Contact</h2><p>SURRAA Community Association, Kuwait — info@surraa.com</p>
       </div></section>
+      <CmsPageExtras slug="privacy" />
     </>
   );
 }

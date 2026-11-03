@@ -7,6 +7,7 @@ import { PassButton } from "@/components/blocks";
 import { src } from "@/lib/site";
 import { siteContent } from "@/lib/cms-site";
 import { publicEvents, view } from "@/lib/bookings";
+import CmsPageExtras from "@/components/CmsPageExtras";
 
 export const dynamic = "force-dynamic";
 
@@ -108,6 +109,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <CmsPageExtras slug="home" />
     </>
   );
 }

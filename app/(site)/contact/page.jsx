@@ -3,6 +3,7 @@ import ContactLink from "@/components/ContactLink";
 import EnquiryForm, { Field } from "@/components/EnquiryForm";
 import { PageHero } from "@/components/ui";
 import { siteContent } from "@/lib/cms-site";
+import CmsPageExtras from "@/components/CmsPageExtras";
 
 export const metadata = { title: "Contact | SURRAA Community Association Kuwait", description: "Contact SURRAA Community Association in Kuwait." };
 
@@ -29,6 +30,7 @@ export default function Contact() {
           </EnquiryForm>
         </div>
       </div></section>
+      <CmsPageExtras slug="contact" />
     </>
   );
 }
