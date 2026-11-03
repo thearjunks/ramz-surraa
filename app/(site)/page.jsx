@@ -6,7 +6,7 @@ import { publicEvents, view } from "@/lib/bookings";
 
 export const dynamic = "force-dynamic";
 
-export function HomeView({ sections }) {
+export function HomeView({ sections, preview = false }) {
   const site = siteContent();
   const event = publicEvents().map(view)[0];
   const C = site.company;
@@ -14,9 +14,9 @@ export function HomeView({ sections }) {
     logo: C.website + "/images/surraa-logo.png", email: C.email, telephone: C.phone,
     address: { "@type": "PostalAddress", addressCountry: "KW" } };
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replaceAll("<", "\\u003c") }} />
     <HomeSections sections={sections} site={site} event={event} />
-    <CmsPageExtras slug="home" />
+    <CmsPageExtras slug="home" preview={preview} />
   </>;
 }
 

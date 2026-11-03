@@ -4,21 +4,26 @@ import { requirePerm } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { setCmsPageStatus, duplicateCmsPage, archiveCmsPage, deleteCmsPage } from "@/lib/cms-actions";
 import { ConfirmButton } from "@/components/admin/Client";
-import { SITE_ROUTES } from "@/lib/cms";
+import WebsitePageTree, { DirectoryFilters } from "@/components/admin/WebsitePageTree";
 
-export default async function ContentPages({ cms = false }) {
+export default async function ContentPages({ cms = false, searchParams }) {
   await requirePerm("content");
-  const base = cms ? "/cms/" : "/admin/content/";
-  const pages = db.prepare("SELECT id, slug, title, status, updated_at FROM cms_pages ORDER BY updated_at DESC").all();
-  const bySlug = Object.fromEntries(pages.map((p) => [p.slug, p]));
+  const base = cms ? "/cms/pages/" : "/admin/content/";
+  const sp = await searchParams || {};
+  const q = String(sp.q || "").trim().toLowerCase();
+  const status = String(sp.status || "").toLowerCase();
+  const sort = sp.sort === "title" ? "title" : "website";
+  const allPages = db.prepare("SELECT id, slug, title, status, updated_at FROM cms_pages ORDER BY updated_at DESC").all();
+  const pages = allPages.filter((p) => (!status || p.status === status) && (!q || `${p.title} ${p.slug} ${p.status}`.toLowerCase().includes(q)));
+  if (sort === "title") pages.sort((a,b) => a.title.localeCompare(b.title));
   return <>
     <Head title="Pages" sub="Create, preview and publish website pages."><Link className="btn btn-primary" href={cms ? "/cms/pages/new/" : "/admin/content/new/"}>New page</Link></Head>
-    <section className="a-card" style={{ marginBottom: 20 }}><h2>Website pages</h2><p className="muted">The live site includes these built-in pages. Site content and event data are managed in their existing editors; custom CMS pages appear below.</p>
-      <div className="a-table-wrap"><table className="a-table"><thead><tr><th>Page</th><th>URL</th><th>Content source</th><th>Actions</th></tr></thead><tbody>
-        {SITE_ROUTES.map(([title, route, slug]) => <tr key={route}><td>{title}</td><td><a href={route} target="_blank" rel="noreferrer">{route}</a></td><td>{slug === "home" ? "Homepage tree" : bySlug[slug]?.status === "published" ? "CMS page" : "Site template + CMS blocks"}</td><td><Link href={slug === "home" ? "/cms/home/" : `/cms/routes/${slug}/`}>{slug === "home" ? "Edit homepage" : "Edit blocks"}</Link>{bySlug[slug] && <> · <Link href={`/cms/pages/${bySlug[slug].id}/`}>Edit CMS page</Link></>}</td></tr>)}
-        <tr><td>Admin dashboard</td><td><a href="/admin/" target="_blank" rel="noreferrer">/admin/</a></td><td>Protected application</td><td>Managed in Admin</td></tr>
-      </tbody></table></div>
+    <DirectoryFilters term={q} status={status} sort={sort} action={base} />
+    <section className="a-card" style={{ marginBottom: 20 }}><h2>Website pages</h2>
+      <WebsitePageTree term={q} status={status} sort={sort} />
     </section>
+    {!q && !status && <section className="a-card" style={{ marginBottom: 20 }}><h2>Protected application</h2><Link href="/admin/">Admin dashboard</Link></section>}
+    <h2>Custom page actions</h2>
     <div className="a-table-wrap"><table className="a-table"><thead><tr><th>CMS page</th><th>URL</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead><tbody>
       {pages.map((p) => <tr key={p.id}><td>{p.title}</td><td className="mono">/{p.slug}/</td><td>{p.status}</td><td>{new Date(p.updated_at).toLocaleString("en-GB")}</td><td className="nowrap">
         <Link className="btn btn-ghost btn-sm" href={cms ? `/cms/pages/${p.id}/` : `/admin/content/${p.id}/`}>Edit</Link>{" "}
@@ -28,7 +33,7 @@ export default async function ContentPages({ cms = false }) {
         {p.status !== "archived" ? <form action={archiveCmsPage} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="cms" value={cms ? "1" : "0"} /><button className="btn btn-ghost btn-sm">Archive</button></form>
           : <form action={deleteCmsPage} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="cms" value={cms ? "1" : "0"} /><ConfirmButton className="btn btn-ghost btn-sm" message={`Permanently delete ${p.title} and its revision history?`}>Delete</ConfirmButton></form>}
       </td></tr>)}
-      {!pages.length && <tr><td colSpan="5">No CMS pages yet.</td></tr>}
+      {!pages.length && <tr><td colSpan="5">{q || status ? "No custom pages match your filters." : "No custom pages yet."}</td></tr>}
     </tbody></table></div>
   </>;
 }

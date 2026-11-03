@@ -16,6 +16,7 @@ export default async function HomeEditor({ searchParams }) {
     <Head title="Home page" sub="Edit and reorder the five sections of the live homepage.">
       <Link className="btn btn-ghost" href="/cms/pages/">← Pages</Link>
       <Link className="btn btn-ghost" href="/home-preview/" target="_blank">Preview saved draft ↗</Link>
+      <Link className="btn btn-ghost" href="/cms/routes/home/blocks/">Additional CMS blocks</Link>
       <a className="btn btn-ghost" href="/" target="_blank" rel="noreferrer">View live ↗</a>
     </Head>
     {sp.saved && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Draft saved. The live homepage is unchanged.</div>}

@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 
-const OPTIONS = [["text", "Text"], ["richtext", "Rich text"], ["number", "Number"], ["boolean", "Yes / No"], ["date", "Date"], ["email", "Email"], ["media", "Media URL"]];
+const OPTIONS = [["text", "Text"], ["richtext", "Long text"], ["number", "Number"], ["boolean", "Yes / No"], ["date", "Date"], ["email", "Email"], ["media", "Media"], ["relation", "Related entry"]];
 
-export default function CmsFieldsBuilder({ initial = [] }) {
+export default function CmsFieldsBuilder({ initial = [], collections = [] }) {
   const [fields, setFields] = useState(initial);
   const update = (index, key, value) => setFields((old) => old.map((field, i) => i === index ? { ...field, [key]: value } : field));
   return <div className="full">
@@ -14,6 +14,7 @@ export default function CmsFieldsBuilder({ initial = [] }) {
         <label className="field">Field key<input className="input" value={field.key || ""} onChange={(e) => update(index, "key", e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} placeholder="title" /></label>
         <label className="field">Label<input className="input" value={field.label || ""} onChange={(e) => update(index, "label", e.target.value)} placeholder="Title" /></label>
         <label className="field">Type<select className="input" value={field.type} onChange={(e) => update(index, "type", e.target.value)}>{OPTIONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+        {field.type === "relation" && <label className="field">Related collection<select className="input" value={field.collectionId || ""} onChange={(e) => update(index, "collectionId", Number(e.target.value))} required><option value="">Choose collection</option>{collections.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>}
         <label className="field"><input type="checkbox" checked={!!field.required} onChange={(e) => update(index, "required", e.target.checked)} /> Required</label>
       </div>
       <button className="btn btn-ghost btn-sm" type="button" onClick={() => setFields((old) => old.filter((_, i) => i !== index))}>Remove field</button>

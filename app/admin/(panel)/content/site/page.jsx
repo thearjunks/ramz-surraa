@@ -11,8 +11,9 @@ export default async function SiteContent({ searchParams, cms = false }) {
   await requirePerm("content");
   const site = siteContent();
   const revisions = db.prepare("SELECT id, created_at FROM cms_site_revisions ORDER BY id DESC LIMIT 10").all();
-  const media = db.prepare("SELECT url, alt_text FROM cms_media WHERE mime LIKE 'image/%' ORDER BY id DESC LIMIT 100").all();
+  const media = db.prepare("SELECT url, alt_text FROM cms_media WHERE mime LIKE 'image/%' ORDER BY id DESC LIMIT 100").all().map((r) => ({ url: r.url, alt_text: r.alt_text }));
   return <><Head title="Site content" sub="Manage company details, membership text, banners, artists and gallery."><Link className="btn btn-ghost" href={cms ? "/cms/" : "/admin/content/"}>← Pages</Link><Link className="btn btn-ghost" href={cms ? "/cms/media/" : "/admin/content/media/"}>Upload images</Link></Head>
+    <div className="a-card btn-row" style={{ marginBottom: 18 }}><Link className="btn btn-ghost" href="/cms/site/header/">Edit website header</Link><Link className="btn btn-ghost" href="/cms/site/footer/">Edit website footer</Link><Link className="btn btn-ghost" href="/cms/navigation/">Edit navigation links</Link></div>
     {(await searchParams).saved && <div className="notice ok" style={{ display: "block" }}>Site content saved.</div>}
     {(await searchParams).restored && <div className="notice ok" style={{ display: "block" }}>Site content restored.</div>}
     <ActionForm action={saveSiteContent} submit="Save & publish site content" className="form a-form3" hidden={{ cms: cms ? "1" : "0" }} fields={[]}><CmsSiteEditor initial={site} media={media} cms={cms} /></ActionForm>

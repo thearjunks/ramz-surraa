@@ -36,7 +36,7 @@ export default async function EventPage({ params }) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replaceAll("<", "\\u003c") }} />
       {e.state.open && <StickyPad />}
       <section className="ev-hero">
         <div className="bg" style={{ backgroundImage: `url(${src(e.poster)})` }} />

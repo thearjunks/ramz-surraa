@@ -3,16 +3,15 @@ import ActionForm from "@/components/ActionForm";
 import CmsNavigation from "@/components/admin/CmsNavigation";
 import { Head } from "@/components/admin/ui";
 import { requirePerm } from "@/lib/auth";
-import { db, setting } from "@/lib/db";
-import { DEFAULT_NAV } from "@/lib/cms";
+import { navigationItems } from "@/lib/cms";
 import { saveCmsNavigation } from "@/lib/cms-actions";
 
 export default async function NavigationAdmin({ searchParams, cms = false }) {
   await requirePerm("content");
-  const rows = db.prepare("SELECT label, href, location, is_visible FROM cms_navigation ORDER BY sort_order, id").all();
-  const initial = setting("cms_navigation_configured") === "1" ? rows.map((r) => ({ label: r.label, href: r.href, location: r.location, visible: !!r.is_visible })) : DEFAULT_NAV.map(([label, href]) => ({ label, href, location: "header", visible: true }));
-  return <><Head title="Navigation" sub="Manage header and footer links. Hide or show each link."><Link className="btn btn-ghost" href={cms ? "/cms/" : "/admin/content/"}>← Pages</Link></Head>
+  const initial = navigationItems(true);
+  return <><Head title="Navigation" sub="Manage header and footer menus, dropdowns and nested links."><Link className="btn btn-ghost" href={cms ? "/cms/" : "/admin/content/"}>← Content manager</Link><Link href="/global-preview/navigation/" className="btn btn-ghost" target="_blank">Preview saved menu</Link></Head>
+    {(await searchParams).draft && <p className="notice ok" style={{display:"block"}}>Menu draft saved.</p>}
     {(await searchParams).saved && <div className="notice ok" style={{ display: "block" }}>Navigation saved.</div>}
-    <section className="a-card"><ActionForm action={saveCmsNavigation} submit="Save & publish navigation" className="form a-form3" hidden={{ cms: cms ? "1" : "0" }} fields={[]}><CmsNavigation initial={initial} /></ActionForm></section>
+    <section className="a-card"><ActionForm action={saveCmsNavigation} submit="Save navigation" className="form a-form3" hidden={{ cms: cms ? "1" : "0" }} fields={[{ name:"intent", label:"Save action", type:"select", noEmpty:true, defaultValue:"draft", options:[["draft","Save draft"],["publish","Publish menu"]] }]}><CmsNavigation initial={initial} /></ActionForm></section>
   </>;
 }

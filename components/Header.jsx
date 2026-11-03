@@ -9,7 +9,7 @@ const NAV = [["Home", "/"], ["About", "/about/"], ["Events", "/events/"], ["Past
 
 // Floating glass "capsule" header. A soft spotlight glides under the link you point at
 // and settles back on the current page; the current page shows a tiny live equalizer.
-export default function Header({ user, navigation = NAV, logo = "/images/surraa-logo.png" }) {
+export default function Header({ user, navigation = NAV, logo = "/images/surraa-logo.png", brandLabel = "Community Association" }) {
   const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -38,6 +38,12 @@ export default function Header({ user, navigation = NAV, logo = "/images/surraa-
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; }, [open]);
 
   const acct = user ? (user.staff ? (user.contentOnly ? ["/cms/", "CMS"] : ["/admin/", "Admin"]) : ["/account/", "My membership"]) : ["/sign-in/", "Member sign in"];
+  const navItem = ([t, u, children], depth = 0) => <li key={`${depth}-${u}-${t}`} className={children?.length ? "nav-has-children" : ""}>
+    <Link href={u} aria-current={cur(u)} onMouseEnter={(e) => depth === 0 && moveTo(e.currentTarget)} onFocus={(e) => depth === 0 && moveTo(e.currentTarget)}>
+      {cur(u) && depth === 0 && <i className="eq" aria-hidden="true"><b /><b /><b /></i>}{t}{children?.length ? " ▾" : ""}
+    </Link>
+    {!!children?.length && <ul className="nav-submenu">{children.map((child) => navItem(child, depth + 1))}</ul>}
+  </li>;
 
   return (
     <header ref={header} className={"site-header hdr3" + (scrolled ? " scrolled" : "")}>
@@ -45,19 +51,13 @@ export default function Header({ user, navigation = NAV, logo = "/images/surraa-
         <div className="nav nav-capsule">
           <Link className="brand brand3" href="/" aria-label="SURRAA Community Association home">
             <img src={logo} alt="" width="86" height="40" />
-            <span className="brand3-tag">Community<br />Association</span>
+            <span className="brand3-tag">{brandLabel}</span>
           </Link>
 
           <nav aria-label="Main">
             <ul ref={menu} className={"menu" + (open ? " open" : "")} id="menu" onMouseLeave={home}>
               <li className="spot" aria-hidden="true" style={{ transform: `translateX(${spot.x}px)`, width: spot.w, opacity: spot.on ? 1 : 0 }} />
-              {navigation.map(([t, u]) => (
-                <li key={u}>
-                  <Link href={u} aria-current={cur(u)} onMouseEnter={(e) => moveTo(e.currentTarget)} onFocus={(e) => moveTo(e.currentTarget)}>
-                    {cur(u) && <i className="eq" aria-hidden="true"><b /><b /><b /></i>}{t}
-                  </Link>
-                </li>
-              ))}
+              {navigation.map((item) => navItem(item))}
               <li className="menu-mobile-only"><Link href="/account/passes/">My Entry Passes</Link></li>
               <li className="menu-mobile-only"><Link href="/track-entry-pass/">Track Entry Pass</Link></li>
               <li className="menu-mobile-only"><Link href={acct[0]}>{user && !user.staff ? user.name : acct[1]}</Link></li>

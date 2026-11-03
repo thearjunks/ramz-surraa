@@ -5,7 +5,7 @@ import MediaField from "./MediaField";
 const EMPTY = { type: "text", heading: "", body: "", image: "", buttonLabel: "", buttonHref: "", visible: true };
 const TYPES = [["hero", "Hero banner"], ["text", "Text"], ["image", "Image"], ["cta", "Call to action"], ["artists", "Artists"], ["gallery", "Gallery"], ["events", "Upcoming events"], ["component", "Reusable component"], ["collection", "Published collection"]];
 
-export default function CmsSections({ initial = [], media = [], components = [], collections = [], cms = false }) {
+export default function CmsSections({ initial = [], media = [], components = [], collections = [], sources = [], cms = false }) {
   const [sections, setSections] = useState(initial);
   const change = (i, key, value) => setSections((list) => list.map((s, n) => n === i ? { ...s, [key]: value } : s));
   const move = (i, by) => setSections((list) => {
@@ -25,12 +25,13 @@ export default function CmsSections({ initial = [], media = [], components = [],
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => setSections((list) => [...list.slice(0, i + 1), { ...s }, ...list.slice(i + 1)])}>Duplicate</button>
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => setSections((list) => list.filter((_, n) => n !== i))}>Delete</button>
       </div></div>
-      <label className="field">Type<select className="input" value={s.type} onChange={(e) => change(i, "type", e.target.value)}>{TYPES.map(([v, label]) => <option key={v} value={v}>{label}</option>)}</select></label>
+      <label className="field">Type<select className="input" value={s.type} onChange={(e) => change(i, "type", e.target.value)}>{TYPES.map(([v, label]) => <option key={v} value={v}>{label}</option>)}{sources.length > 0 && <option value="shared-section">Shared page section</option>}</select></label>
+      {s.type === "shared-section" && <label className="field">Source section<select className="input" value={s.source || ""} onChange={(e) => change(i, "source", e.target.value)} required><option value="">Select a page section…</option>{sources.map((source) => <option key={source.value} value={source.value}>{source.page} / {source.name}</option>)}</select></label>}
       {s.type === "component" && <label className="field">Reusable component<select className="input" value={s.componentId || ""} onChange={(e) => change(i, "componentId", Number(e.target.value))}><option value="">Select component…</option>{components.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>}
       {s.type === "collection" && <label className="field">Collection type<select className="input" value={s.collectionId || ""} onChange={(e) => change(i, "collectionId", Number(e.target.value))}><option value="">Select collection…</option>{collections.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>}
       <label className="field"><input type="checkbox" checked={s.visible !== false} onChange={(e) => change(i, "visible", e.target.checked)} /> Show this section on the website</label>
-      <label className="field">Heading<input className="input" value={s.heading || ""} onChange={(e) => change(i, "heading", e.target.value)} /></label>
-      <label className="field">Text<textarea className="input" rows="4" value={s.body || ""} onChange={(e) => change(i, "body", e.target.value)} /></label>
+      {!["shared-section", "component"].includes(s.type) && <><label className="field">Heading<input className="input" value={s.heading || ""} onChange={(e) => change(i, "heading", e.target.value)} /></label>
+      <label className="field">Text<textarea className="input" rows="4" value={s.body || ""} onChange={(e) => change(i, "body", e.target.value)} /></label></>}
       {(s.type === "hero" || s.type === "image") && <MediaField label="Image" value={s.image || ""} onChange={(value) => change(i, "image", value)} media={media} cms={cms} />}
       {(s.type === "hero" || s.type === "cta") && <><label className="field">Button label<input className="input" value={s.buttonLabel || ""} onChange={(e) => change(i, "buttonLabel", e.target.value)} /></label><label className="field">Button link<input className="input" value={s.buttonHref || ""} placeholder="/events/" onChange={(e) => change(i, "buttonHref", e.target.value)} /></label></>}
     </section>)}

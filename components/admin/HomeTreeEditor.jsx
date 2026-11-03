@@ -68,7 +68,7 @@ export default function HomeTreeEditor({ initial, published, media = [], hasDraf
             {field("Secondary button", s.secondaryLabel, (v) => update(s.id, "secondaryLabel", v))}{field("Secondary link", s.secondaryHref, (v) => update(s.id, "secondaryHref", v))}</>}
           {s.id === "artists" && <><ChildList title="Artists" kind="people" items={s.people || []} onChange={(v) => update(s.id, "people", v)} blank={{ slug: "", name: "", photo: "", role: "", group: "" }} media={media} />
             {field("All artists button", s.buttonLabel, (v) => update(s.id, "buttonLabel", v))}{field("All artists link", s.buttonHref, (v) => update(s.id, "buttonHref", v))}</>}
-          <button className="btn btn-ghost btn-sm" type="submit" name="section_id" value={s.id} formAction={publishHomeSection}>Publish this section</button>
+          <button className="btn btn-ghost btn-sm" type="submit" formAction={publishHomeSection.bind(null, s.id)}>Publish this section</button>
         </div>
       </details>)}
     </div>
