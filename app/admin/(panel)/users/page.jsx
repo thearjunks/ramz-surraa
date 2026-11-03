@@ -9,15 +9,16 @@ import { saveCategory, approveAccess, rejectAccess } from "@/lib/admin-actions";
 
 const PER = 50;
 
-export default async function Users({ searchParams }) {
+export default async function Users({ searchParams, kind = "staff" }) {
+  const members = kind === "members";
   const me = await requirePerm("users");
-  const pending = db.prepare("SELECT * FROM users WHERE account_status = 'pending' ORDER BY id").all();
+  const pending = members ? [] : db.prepare("SELECT * FROM users WHERE role != 'member' AND account_status = 'pending' ORDER BY id").all();
   const roleOpts = Object.entries(ROLES).filter(([k]) => k !== "member" && (k !== "super_admin" || me.role === "super_admin"));
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
-  const w = [], a = [];
+  const w = [members ? "u.role = 'member'" : "u.role != 'member'"], a = [];
   if (sp.q) { w.push("(u.name LIKE ? OR u.email LIKE ? OR u.mobile LIKE ? OR u.membership_id LIKE ? OR u.username LIKE ?)"); a.push(...Array(5).fill("%" + sp.q + "%")); }
-  if (sp.role) { w.push("u.role = ?"); a.push(sp.role); }
+  if (!members && sp.role && sp.role !== "member") { w.push("u.role = ?"); a.push(sp.role); }
   const where = w.length ? "WHERE " + w.join(" AND ") : "";
   const total = db.prepare(`SELECT COUNT(*) n FROM users u ${where}`).get(...a).n;
   const users = db.prepare(`SELECT u.*, c.name cat,
@@ -28,9 +29,9 @@ export default async function Users({ searchParams }) {
   const qs = (x) => "?" + new URLSearchParams({ ...(sp.q && { q: sp.q }), ...(sp.role && { role: sp.role }), ...x });
   return (
     <>
-      <Head title="Users & Members" sub={`${total} accounts`}>
-        <a className="btn btn-ghost" href="/admin/export/?report=members&format=xlsx">Members (Excel)</a>
-        <Link className="btn btn-primary" href="/admin/users/new/"><Icon name="users" />Add user / staff</Link>
+      <Head title={members ? "Members" : "Users"} sub={`${total} ${members ? "website memberships" : "dashboard accounts"}`}>
+        {members ? <a className="btn btn-ghost" href="/admin/export/?report=members&format=xlsx">Members (Excel)</a>
+          : <Link className="btn btn-primary" href="/admin/users/new/"><Icon name="users" />Add dashboard user</Link>}
       </Head>
       {sp.saved && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Saved.</div>}
       {pending.length > 0 && (
@@ -49,19 +50,19 @@ export default async function Users({ searchParams }) {
       )}
       <form className="a-filters" method="get">
         <input className="input" name="q" defaultValue={sp.q} placeholder="Name, username, email, mobile, membership ID" style={{ gridColumn: "span 2" }} />
-        <select className="input" name="role" defaultValue={sp.role}><option value="">All roles</option>{Object.entries(ROLES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
-        <div className="btn-row"><button className="btn btn-primary">Search</button><Link className="btn btn-ghost" href="/admin/users/">Reset</Link></div>
+        {!members && <select className="input" name="role" defaultValue={sp.role}><option value="">All dashboard roles</option>{Object.entries(ROLES).filter(([k]) => k !== "member").map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>}
+        <div className="btn-row"><button className="btn btn-primary">Search</button><Link className="btn btn-ghost" href={members ? "/admin/members/" : "/admin/users/"}>Reset</Link></div>
       </form>
       <div className="a-table-wrap"><table className="a-table">
-        <thead><tr><th>ID</th><th>Username</th><th>Membership ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Nationality</th><th>Civil ID</th><th>Role</th><th>Category</th><th>Membership</th><th>Account</th><th>Requests</th><th>Passes</th><th>Registered</th><th>Last login</th><th></th></tr></thead>
+        <thead><tr><th>ID</th>{!members && <th>Username</th>}{members && <th>Membership ID</th>}<th>Name</th><th>Mobile</th><th>Email</th><th>Nationality</th>{members && <th>Civil ID</th>}{!members && <th>Role</th>}{members && <><th>Category</th><th>Membership</th></>}<th>Account</th><th>Requests</th><th>Passes</th><th>Registered</th><th>Last login</th><th></th></tr></thead>
         <tbody>{users.map((x) => (
-          <tr key={x.id}><td>{x.id}</td><td className="mono">{x.username || "—"}</td><td className="mono">{x.membership_id || "—"}</td><td>{x.name}{!x.email_verified && <small className="muted"> · unverified</small>}</td><td className="nowrap">{x.mobile}</td><td>{x.email}</td><td>{x.nationality}</td>
-            <td className="nowrap">{maskCivil(x.civil_last4) || "—"}</td><td>{ROLES[x.role]}</td><td>{x.cat || "—"}</td><td>{x.membership_status}</td><td>{x.account_status}</td><td>{x.requests}</td><td>{x.passes}</td>
-            <td className="nowrap">{fmtDT(x.created_at)}</td><td className="nowrap">{fmtDT(x.last_login) || "—"}</td><td><Link className="btn btn-ghost btn-sm" href={`/admin/users/${x.id}/`}>Edit</Link></td></tr>))}</tbody>
+          <tr key={x.id}><td>{x.id}</td>{!members && <td className="mono">{x.username || "—"}</td>}{members && <td className="mono">{x.membership_id || "—"}</td>}<td>{x.name}{!x.email_verified && <small className="muted"> · unverified</small>}</td><td className="nowrap">{x.mobile}</td><td>{x.email}</td><td>{x.nationality}</td>
+            {members && <td className="nowrap">{maskCivil(x.civil_last4) || "—"}</td>}{!members && <td>{ROLES[x.role]}</td>}{members && <><td>{x.cat || "—"}</td><td>{x.membership_status}</td></>}<td>{x.account_status}</td><td>{x.requests}</td><td>{x.passes}</td>
+            <td className="nowrap">{fmtDT(x.created_at)}</td><td className="nowrap">{fmtDT(x.last_login) || "—"}</td><td><Link className="btn btn-ghost btn-sm" href={`/admin/${members ? "members" : "users"}/${x.id}/`}>Edit</Link></td></tr>))}</tbody>
       </table></div>
-      <div className="a-pager">{page > 1 && <Link className="btn btn-ghost btn-sm" href={qs({ page: page - 1 })}>← Previous</Link>}<span className="muted">Page {page}</span>{page * PER < total && <Link className="btn btn-ghost btn-sm" href={qs({ page: page + 1 })}>Next →</Link>}</div>
+      <div className="a-pager">{page > 1 && <Link className="btn btn-ghost btn-sm" href={(members ? "/admin/members/" : "/admin/users/") + qs({ page: page - 1 })}>← Previous</Link>}<span className="muted">Page {page}</span>{page * PER < total && <Link className="btn btn-ghost btn-sm" href={(members ? "/admin/members/" : "/admin/users/") + qs({ page: page + 1 })}>Next →</Link>}</div>
 
-      <section className="a-card" id="categories" style={{ marginTop: 30 }}>
+      {members && <section className="a-card" id="categories" style={{ marginTop: 30 }}>
         <h2>Membership categories</h2>
         <p className="muted" style={{ fontSize: 14 }}>New members join the first active category. Change a member’s category on their account.</p>
         {cats.map((c) => (
@@ -69,7 +70,7 @@ export default async function Users({ searchParams }) {
             <input className="input" name="name" defaultValue={c.name} aria-label="Category name" /><input className="input" name="benefits" defaultValue={c.benefits} aria-label="Benefits" style={{ flex: 2 }} />
             <label className="consent"><input type="checkbox" name="active" defaultChecked={!!c.active} /> Active</label><button className="btn btn-ghost btn-sm">Save</button></form>))}
         <form action={saveCategory} className="a-inline"><input className="input" name="name" placeholder="New category name" aria-label="New category" /><input className="input" name="benefits" placeholder="Benefits" aria-label="Benefits" style={{ flex: 2 }} /><button className="btn btn-primary btn-sm">Add</button></form>
-      </section>
+      </section>}
     </>
   );
 }

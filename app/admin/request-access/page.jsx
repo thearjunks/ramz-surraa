@@ -5,7 +5,8 @@ import { requestAccess } from "@/lib/admin-actions";
 
 export const metadata = { title: "Request Admin Access | SURRAA", robots: { index: false, follow: false } };
 
-const ROLE_HINT = [["booking_staff", ROLES.booking_staff + " — manage booking requests"], ["checkin", ROLES.checkin + " — scan passes at the entrance"],
+const ROLE_HINT = [["content_manager", ROLES.content_manager + " — manage and publish website content"], ["editor", ROLES.editor + " — edit website content"],
+  ["booking_staff", ROLES.booking_staff + " — manage booking requests"], ["checkin", ROLES.checkin + " — scan passes at the entrance"],
   ["event_manager", ROLES.event_manager + " — events & bookings"], ["finance", ROLES.finance + " — payments"], ["admin", ROLES.admin + " — full access"]];
 
 export default function RequestAccess() {

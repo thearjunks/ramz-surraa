@@ -520,6 +520,24 @@ img{height:auto}
 .m-facts svg{width:22px;height:22px;color:var(--volt);flex-shrink:0}
 .m-facts small{display:block;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .m-form{grid-template-columns:1fr 1fr}
+.entry-request-card{padding:clamp(24px,4vw,44px);background:radial-gradient(circle at 100% 0%,rgba(47,179,90,.11),transparent 35%),var(--card);border-color:rgba(201,217,63,.2)}
+.entry-request-head{padding-bottom:26px;border-bottom:1px solid var(--line2);margin-bottom:26px}
+.entry-request-head h2{font-size:clamp(34px,4vw,48px);margin:12px 0 8px}
+.entry-request-head p{color:var(--muted);font-size:14px;max-width:50ch}
+.entry-request-form{column-gap:18px;row-gap:20px}
+.entry-request-form .form-section{display:flex;align-items:flex-start;gap:14px;padding:24px 0 2px;border-top:1px solid var(--line2)}
+.entry-request-form .form-section:first-of-type{padding-top:0;border-top:0}
+.form-section-number{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:rgba(201,217,63,.13);color:var(--volt);font-size:12px;font-weight:800;letter-spacing:.06em}
+.entry-request-form .form-section h3{font-size:23px;line-height:1.2}
+.entry-request-form .form-section p{font-size:13px;color:var(--muted);margin-top:4px}
+.entry-request-form .field label:not(.consent){letter-spacing:.11em}
+.entry-request-form .input{min-height:54px;background:#121b14;border-color:rgba(255,255,255,.18)}
+.entry-request-form .input:hover{border-color:rgba(201,217,63,.5)}
+.entry-request-form .input:focus{border-color:var(--volt);box-shadow:0 0 0 3px rgba(201,217,63,.13)}
+.entry-request-form .field label.consent{padding:16px;border:1px solid var(--line2);border-radius:12px;background:rgba(255,255,255,.025);margin-top:4px}
+.entry-request-form .consent input{accent-color:var(--lime);margin-top:3px;flex-shrink:0}
+.entry-request-form button[type=submit]{min-height:56px;border-radius:14px;font-weight:800;letter-spacing:.04em}
+@media(max-width:640px){.entry-request-card{padding:22px 18px}.entry-request-form{grid-template-columns:1fr}.entry-request-form .form-section{padding-top:20px}}
 .m-done{display:grid;gap:14px;justify-items:start}
 .m-done h3{font-size:34px}
 .m-banner{display:flex;gap:12px;align-items:center;margin:4px 0 20px;padding:14px 18px;border-radius:var(--r-sm);background:rgba(233,236,58,.08);border:1px solid rgba(233,236,58,.3)}
@@ -813,3 +831,4 @@ details.a-card summary{cursor:pointer;list-style:none}
 .stage-dots button:hover>span{background:rgba(255,255,255,.45)}
 @keyframes fill{to{transform:none}}
 @media(max-width:560px){.stage-cap{display:none}.stage-dots button{width:24px}.stage-ui{bottom:18px}}
+.pass-holder-fields{margin:8px 0 16px}.pass-holder-fields h3{font-size:21px;margin:0 0 4px}.pass-holder-fields>.hint{margin:0 0 14px}.pass-holder-row{border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pass-holder-row legend{font-weight:700;padding:0 8px}.pass-holder-row .field{display:grid;gap:7px}.pass-holder-row .field span{font-size:12px;text-transform:uppercase;letter-spacing:.08em}.pass-holder-row .input{width:100%}@media(max-width:600px){.pass-holder-row{grid-template-columns:1fr}}

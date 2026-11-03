@@ -48,7 +48,7 @@ export default async function EntryPass({ params, searchParams }) {
         ) : (
           <>
             <div className="section-head" style={{ marginBottom: 20 }}><div><span className="kicker">{b.ref}</span><h1 style={{ fontSize: "clamp(36px,5vw,60px)" }}>Your <span className="grad">entry passes</span></h1></div>
-              <a className="btn btn-primary" href={`/entry-pass-pdf/${b.access_token}/`}><Icon name="ticket" />Download PDF</a></div>
+              <a className="btn btn-primary" href={`/entry-pass-pdf/${b.access_token}/?download=1`}><Icon name="ticket" />Download PDF</a></div>
             <div className="passes">
               {passes.map((p, i) => (
                 <article key={p.id} className="epass">
@@ -92,7 +92,7 @@ export default async function EntryPass({ params, searchParams }) {
 
         <div className="btn-row" style={{ marginTop: 24 }}>
           <Link className="btn btn-primary" href="/track-entry-pass/"><Icon name="search" />Track my pass</Link>
-          <a className="btn btn-ghost" href={`/entry-pass-pdf/${b.access_token}/`}><Icon name="ticket" />{confirmed ? "Download passes (PDF)" : "Download acknowledgement (PDF)"}</a>
+          <a className="btn btn-ghost" href={`/entry-pass-pdf/${b.access_token}/?download=1`}><Icon name="ticket" />{confirmed ? "Download passes (PDF)" : "Download acknowledgement (PDF)"}</a>
           <Link className="btn btn-ghost" href={`/events/${e.slug}/`}>Return to event</Link>
         </div>
         <p className="muted" style={{ marginTop: 18, fontSize: 13 }}>Keep this page private — anyone with this link can see your request. Bookmark it or use “Track Entry Pass” later.</p>

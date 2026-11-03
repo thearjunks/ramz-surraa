@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Head } from "@/components/admin/ui";
 import { requirePerm } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { setCmsPageStatus, duplicateCmsPage, archiveCmsPage } from "@/lib/cms-actions";
+import { setCmsPageStatus, duplicateCmsPage, archiveCmsPage, deleteCmsPage } from "@/lib/cms-actions";
+import { ConfirmButton } from "@/components/admin/Client";
 
 export default async function ContentPages() {
   await requirePerm("content");
@@ -15,7 +16,8 @@ export default async function ContentPages() {
         <Link className="btn btn-ghost btn-sm" href={`/cms/preview/${p.slug}/`} target="_blank">Preview</Link>{" "}
         <form action={duplicateCmsPage} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><button className="btn btn-ghost btn-sm">Duplicate</button></form>{" "}
         <form action={setCmsPageStatus} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="status" value={p.status === "draft" ? "published" : "draft"} /><button className="btn btn-ghost btn-sm">{p.status === "published" ? "Unpublish" : p.status === "archived" ? "Restore draft" : "Publish"}</button></form>{" "}
-        {p.status !== "archived" && <form action={archiveCmsPage} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><button className="btn btn-ghost btn-sm">Archive</button></form>}
+        {p.status !== "archived" ? <form action={archiveCmsPage} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><button className="btn btn-ghost btn-sm">Archive</button></form>
+          : <form action={deleteCmsPage} style={{ display: "inline" }}><input type="hidden" name="id" value={p.id} /><ConfirmButton className="btn btn-ghost btn-sm" message={`Permanently delete ${p.title} and its revision history?`}>Delete</ConfirmButton></form>}
       </td></tr>)}
       {!pages.length && <tr><td colSpan="5">No CMS pages yet.</td></tr>}
     </tbody></table></div>

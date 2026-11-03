@@ -12,23 +12,24 @@ const LOOK = {
   denied: ["err", "ACCESS DENIED", "This pass can't be checked in."],
 };
 
-// Camera scanning uses the browser's BarcodeDetector (Chrome on Android/desktop). Elsewhere: type the code or serial.
+// qr-scanner falls back to its QR decoder when BarcodeDetector is unavailable (including iPhone browsers).
 export default function Scanner() {
   const video = useRef(null);
   const [cam, setCam] = useState("off");
   const [res, setRes] = useState(null);
   const [code, setCode] = useState("");
   const [auto, setAuto] = useState(true);
-  const busy = useRef(false), last = useRef("");
-  const [hasDetector, setHasDetector] = useState(false);
-  useEffect(() => setHasDetector("BarcodeDetector" in window), []);
+  const busy = useRef(false), last = useRef(""), autoRef = useRef(auto);
+  const [canCamera, setCanCamera] = useState(false);
+  useEffect(() => { autoRef.current = auto; }, [auto]);
+  useEffect(() => setCanCamera(!!navigator.mediaDevices?.getUserMedia && window.isSecureContext), []);
 
   async function handle(raw) {
     if (busy.current || !raw) return;
     busy.current = true;
     try {
       let r = await verifyAction(raw);
-      if (r.result === "valid" && auto && !r.wrongDay) r = { ...r, result: (await checkInAction(r.pass.id)).result };
+      if (r.result === "valid" && autoRef.current && !r.wrongDay) r = { ...r, result: (await checkInAction(r.pass.id)).result };
       setRes(r);
       try { navigator.vibrate?.(r.result === "checked_in" || r.result === "valid" ? 80 : [60, 60, 60]); } catch {}
     } finally { setTimeout(() => (busy.current = false), 1200); }
@@ -36,21 +37,19 @@ export default function Scanner() {
 
   useEffect(() => {
     if (cam !== "on") return;
-    let stream, timer, stop = false;
+    let scanner, stop = false;
     (async () => {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        video.current.srcObject = stream; await video.current.play();
-        const det = new window.BarcodeDetector({ formats: ["qr_code"] });
-        const tick = async () => {
-          if (stop) return;
-          try { const c = await det.detect(video.current); if (c[0] && c[0].rawValue !== last.current) { last.current = c[0].rawValue; handle(c[0].rawValue); setTimeout(() => (last.current = ""), 4000); } } catch {}
-          timer = setTimeout(tick, 250);
-        };
-        tick();
+        const QrScanner = (await import("qr-scanner")).default;
+        if (stop || !video.current) return;
+        scanner = new QrScanner(video.current, (result) => {
+          const raw = result.data;
+          if (raw && raw !== last.current) { last.current = raw; handle(raw); setTimeout(() => (last.current = ""), 4000); }
+        }, { preferredCamera: "environment", returnDetailedScanResult: true, maxScansPerSecond: 8 });
+        await scanner.start();
       } catch { setCam("error"); }
     })();
-    return () => { stop = true; clearTimeout(timer); stream?.getTracks().forEach((t) => t.stop()); };
+    return () => { stop = true; scanner?.destroy(); };
   }, [cam]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const look = res && LOOK[res.result];
@@ -58,8 +57,8 @@ export default function Scanner() {
     <div className="scanner">
       <div className="scan-cam">
         {cam === "on" ? <video ref={video} playsInline muted /> : <div className="scan-ph">
-          {hasDetector ? <button className="btn btn-primary" onClick={() => setCam("on")}>Start camera</button> : <p className="muted">Camera scanning needs Chrome on Android or desktop. Type the pass code or serial below.</p>}
-          {cam === "error" && <p className="muted">Camera unavailable — allow camera access, or type the code.</p>}</div>}
+          {canCamera ? <button className="btn btn-primary" onClick={() => setCam("on")}>Start camera</button> : <p className="muted">Camera scanning needs HTTPS and camera permission. You can type the pass code or serial below.</p>}
+          {cam === "error" && <p className="muted">Camera unavailable — allow camera access in your browser, or type the code.</p>}</div>}
       </div>
       <form className="a-inline" onSubmit={(e) => { e.preventDefault(); handle(code.trim()); setCode(""); }}>
         <input className="input" value={code} onChange={(e) => setCode(e.target.value)} placeholder="QR code or pass serial (SCA-EVT001-2026-0001)" aria-label="Pass code or serial" />

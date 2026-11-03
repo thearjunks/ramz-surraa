@@ -1,5 +1,5 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Icon from "./Icon";
 
 /* Form driven by a server action and a list of plain field specs:
@@ -8,10 +8,19 @@ import Icon from "./Icon";
 export default function ActionForm({ action, fields, submit = "Submit", hidden = {}, datalists = {}, className = "form", children }) {
   const [state, run, pending] = useActionState(action, null);
   const val = (f) => state?.values?.[f.name] ?? f.defaultValue ?? "";
+  const [passCount, setPassCount] = useState(() => Number(fields.find((f) => f.name === "quantity")?.defaultValue) || 1);
   return (
     <form action={run} className={className} key={state ? JSON.stringify(state.values || {}) + (state.error || state.ok || "") : "init"}>
       {Object.entries(hidden).map(([k, v]) => <input key={k} type="hidden" name={k} value={v ?? ""} />)}
       {fields.map((f) => {
+        if (f.type === "section") return <div key={f.name} className="form-section full"><span className="form-section-number">{f.step}</span><div><h3>{f.label}</h3>{f.hint && <p>{f.hint}</p>}</div></div>;
+        if (f.type === "pass_holders") return <div key={f.name} className="pass-holder-fields full">
+          <h3>Names on the passes</h3><p className="hint">Each pass will show the first and last name entered here.</p>
+          {Array.from({ length: passCount }, (_, i) => <fieldset key={i} className="pass-holder-row"><legend>Pass {i + 1}</legend>
+            <label className="field" htmlFor={`f-holder-first-${i}`}><span>First name *</span><input className="input" id={`f-holder-first-${i}`} name={`holder_first_${i + 1}`} required maxLength={80} autoComplete="off" defaultValue={state?.values?.[`holder_first_${i + 1}`] ?? f.holders?.[i]?.first ?? ""} /></label>
+            <label className="field" htmlFor={`f-holder-last-${i}`}><span>Last name *</span><input className="input" id={`f-holder-last-${i}`} name={`holder_last_${i + 1}`} required maxLength={80} autoComplete="off" defaultValue={state?.values?.[`holder_last_${i + 1}`] ?? f.holders?.[i]?.last ?? ""} /></label>
+          </fieldset>)}
+        </div>;
         const id = "f-" + f.name;
         const common = { id, name: f.name, required: f.required, autoComplete: f.autoComplete, placeholder: f.placeholder, defaultValue: val(f), disabled: f.disabled };
         if (f.type === "checkbox") return (
@@ -20,9 +29,9 @@ export default function ActionForm({ action, fields, submit = "Submit", hidden =
         return (
           <div key={f.name} className={"field" + (f.full ? " full" : "")}>
             <label htmlFor={id}>{f.label}{f.required && " *"}</label>
-            {f.type === "select" ? <select className="input" {...common}>{!f.noEmpty && <option value="">Select…</option>}{f.options.map((o) => Array.isArray(o) ? <option key={o[0]} value={o[0]}>{o[1]}</option> : <option key={o}>{o}</option>)}</select>
+            {f.type === "select" ? <select className="input" {...common} onChange={f.name === "quantity" ? (e) => setPassCount(Number(e.target.value) || 1) : undefined}>{!f.noEmpty && <option value="">Select…</option>}{f.options.map((o) => Array.isArray(o) ? <option key={o[0]} value={o[0]}>{o[1]}</option> : <option key={o}>{o}</option>)}</select>
               : f.type === "textarea" ? <textarea className="input" {...common} />
-              : <input className="input" type={f.type || "text"} list={f.list} min={f.min} max={f.max} inputMode={f.inputMode} maxLength={f.maxLength} {...common} />}
+              : <input className="input" type={f.type || "text"} list={f.list} min={f.min} max={f.max} inputMode={f.inputMode} maxLength={f.maxLength} {...common} onChange={f.name === "quantity" ? (e) => setPassCount(Math.max(1, Math.min(Number(e.target.value) || 1, Number(f.max) || 100))) : undefined} />}
             {f.hint && <p className="hint">{f.hint}</p>}
           </div>
         );
