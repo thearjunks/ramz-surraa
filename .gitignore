@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+# private data — never commit
+data/*.db
+data/*.db-*
+data/secret.key
+.env*
+public/uploads/
