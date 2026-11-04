@@ -22,5 +22,5 @@ export default async function EventEditorialEditor({params,searchParams}) {
     {sp.preview ? <article className="a-card"><h2>{values.name}</h2>{values.poster && <img src={src(values.poster)} alt={values.name} style={{maxWidth:300}}/>}<p>{values.category}</p><p style={{whiteSpace:"pre-line"}}>{values.description}</p><Link href={`/cms/collections/events/${live.id}/`}>Return to editor</Link></article>
     : <section className="a-card"><Link href={`/cms/collections/events/${live.id}/?preview=1`} target="_blank">Preview saved content ↗</Link>
       <ActionForm action={saveEventEditorial} submit="Save event content" className="form a-form3" hidden={{id:live.id,updated_at:live.updated_at,draft_at:draft?.at || ""}} fields={[{name:"intent",type:"select",label:"Save action",noEmpty:true,defaultValue:"draft",options:[["draft","Save draft"],["published","Publish content"]]}]}>
-        <CmsEntryFields fields={fields} initial={Object.fromEntries(fields.map((f)=>[f.key,values[f.key] || ""]))} media={media}/></ActionForm></section>}</>;
+        <CmsEntryFields fields={fields} initial={Object.fromEntries(fields.map((f)=>[f.key,values[f.key] || ""]))} media={media} allowPdf={false}/></ActionForm></section>}</>;
 }

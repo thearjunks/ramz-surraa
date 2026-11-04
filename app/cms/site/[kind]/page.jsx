@@ -5,6 +5,7 @@ import { requirePerm } from "@/lib/auth";
 import { globalContent } from "@/lib/global-content";
 import { saveGlobalContent } from "@/lib/global-actions";
 import { db } from "@/lib/db";
+import MediaField from "@/components/admin/MediaField";
 
 export default async function GlobalEditor({ params, searchParams }) {
   await requirePerm("content");
@@ -18,9 +19,7 @@ export default async function GlobalEditor({ params, searchParams }) {
     {sp.published && <div className="notice ok" style={{ display: "block" }}>Published on all pages.</div>}
     {sp.error && <div className="notice err" style={{ display: "block" }}>Check the image URL and text.</div>}
     <form action={saveGlobalContent} className="a-card form a-form3"><input type="hidden" name="kind" value={kind} />
-      <label className="field full">Logo URL<input className="input" name="logo" defaultValue={data.logo} required list="cms-global-images" /></label>
-      <datalist id="cms-global-images">{images.map((image) => <option key={image.url} value={image.url}>{image.filename}</option>)}</datalist>
-      <p className="muted full"><Link href="/cms/media/">Upload or choose an image from Media Library</Link></p>
+      <MediaField label="Logo URL" name="logo" defaultValue={data.logo} required media={images.map((image) => ({ ...image }))} />
       {kind === "header" ? <label className="field full">Brand label<input className="input" name="label" defaultValue={data.label} /></label>
         : <><label className="field">Links heading<input className="input" name="heading" defaultValue={data.heading} /></label>
           <label className="field full">Description<textarea className="input" name="description" defaultValue={data.description} rows="4" /></label>

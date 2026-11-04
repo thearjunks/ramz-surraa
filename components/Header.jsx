@@ -37,7 +37,7 @@ export default function Header({ user, navigation = NAV, logo = "/images/surraa-
   useLayoutEffect(() => { setOpen(false); home(); }, [path, home]);
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; }, [open]);
 
-  const acct = user ? (user.staff ? (user.contentOnly ? ["/cms/", "CMS"] : ["/admin/", "Admin"]) : ["/account/", "My membership"]) : ["/sign-in/", "Member sign in"];
+  const acct = user ? (user.staff ? ["/cms/", "CMS"] : ["/account/", "My membership"]) : ["/sign-in/", "Member sign in"];
   const navItem = ([t, u, children], depth = 0) => <li key={`${depth}-${u}-${t}`} className={children?.length ? "nav-has-children" : ""}>
     <Link href={u} aria-current={cur(u)} onMouseEnter={(e) => depth === 0 && moveTo(e.currentTarget)} onFocus={(e) => depth === 0 && moveTo(e.currentTarget)}>
       {cur(u) && depth === 0 && <i className="eq" aria-hidden="true"><b /><b /><b /></i>}{t}{children?.length ? " ▾" : ""}

@@ -30,12 +30,11 @@ export default async function RequestPass({ params }) {
     user?.civil_enc
       ? { name: "civil", label: "Civil ID number", inputMode: "numeric", maxLength: 14, placeholder: `Saved: •••• ${user.civil_last4} — leave blank to use it`, hint: "Your saved Civil ID is used unless you enter a different one." }
       : { name: "civil", label: "Civil ID number", required: true, inputMode: "numeric", maxLength: 14, placeholder: "12 digits", hint: "Stored encrypted and visible only to authorised staff. Never shown on passes or QR codes." },
-    { name: "address_section", type: "section", step: "02", label: "Current Kuwait address", hint: "Tell us where you currently live in Kuwait." },
-    { name: "location", label: "Current location / area", required: true, placeholder: "e.g. Salmiya", autoComplete: "address-level3", full: true },
-    { name: "block", label: "Block", required: true, placeholder: "e.g. Block 10" },
-    { name: "street", label: "Street", required: true, placeholder: "Street name or number", autoComplete: "address-line1" },
-    { name: "city", label: "City", required: true, placeholder: "e.g. Hawally", autoComplete: "address-level2" },
-    { name: "building", label: "Building / house / apartment", placeholder: "Optional", autoComplete: "address-line2" },
+    { name: "address_section", type: "section", step: "02", label: "Where you live", hint: "Choose your Kuwait governorate." },
+    { name: "governorate", label: "Governorate", type: "select", required: true, options: [
+      ["Al Asimah", "Al Asimah"], ["Al Farwaniya", "Al Farwaniya"], ["Hawalli", "Hawalli"],
+      ["Al Ahmadi", "Al Ahmadi"], ["Al Jahra", "Al Jahra"], ["Mubarak Al Kabeer", "Mubarak Al Kabeer"],
+    ], full: true },
     { name: "request_section", type: "section", step: "03", label: "Your request", hint: "Choose how many entry passes you need." },
     { name: "quantity", label: "Number of entry passes", type: "select", required: true, noEmpty: true, options: Array.from({ length: max }, (_, i) => [String(i + 1), String(i + 1)]) },
     { name: "pass_holders", type: "pass_holders" },
