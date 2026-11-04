@@ -542,6 +542,8 @@ img{height:auto}
 .m-done h3{font-size:34px}
 .m-banner{display:flex;gap:12px;align-items:center;margin:4px 0 20px;padding:14px 18px;border-radius:var(--r-sm);background:rgba(233,236,58,.08);border:1px solid rgba(233,236,58,.3)}
 .m-banner svg{width:20px;height:20px;color:var(--volt);flex-shrink:0}
+.entry-choice>div{min-width:0;flex:1}.entry-choice-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.entry-request-card{scroll-margin-top:calc(var(--hh,80px) + 16px)}
+@media(max-width:700px){.entry-choice{align-items:flex-start}.entry-choice-actions{display:grid;grid-template-columns:1fr}.entry-choice-actions .btn{width:100%;justify-content:center;min-height:48px}}
 .foot-simple{grid-template-columns:1.6fr 1fr 1fr}
 @media(max-width:640px){.foot-simple{grid-template-columns:1fr}}
 .m-steps.col{grid-template-columns:1fr;gap:10px}

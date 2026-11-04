@@ -55,7 +55,8 @@ export default async function RequestPass({ params }) {
             <div><span className="kicker">{e.event_code}</span><h3>{e.title}</h3>
               <p className="muted">{e.dateLabel}{e.timeLabel ? " · " + e.timeLabel : ""}<br />{e.venue}, {e.area}</p></div>
           </div>
-          {!user && <div className="m-banner"><Icon name="users" /><span><b>Member?</b> <Link href={`/sign-in/?next=/events/${e.slug}/entry-pass/`} style={{ color: "var(--volt)" }}>Sign in</Link> to fill this in automatically — or continue as a guest.</span></div>}
+          {!user && <div className="m-banner entry-choice"><Icon name="users" /><div><span><b>Already a member?</b> Sign in to fill your details automatically, or continue as a guest.</span>
+            <div className="entry-choice-actions"><Link className="btn btn-primary" href={`/sign-in/?next=/events/${e.slug}/entry-pass/`}>Member sign in</Link><a className="btn btn-ghost" href="#entry-request">Continue as guest</a></div></div></div>}
           {user && <div className="m-banner"><Icon name="star" /><span>Signed in as <b>{user.name}</b> · Member {user.membership_id}. Your details are filled in — check them before sending.</span></div>}
           <ul className="m-facts">
             <li><Icon name="clock" /><span><small>Step 1</small>Send your request — you get a booking reference straight away.</span></li>
@@ -64,7 +65,7 @@ export default async function RequestPass({ params }) {
           </ul>
           <div className="faq" id="terms"><details><summary>Event terms & conditions</summary><p style={{ whiteSpace: "pre-line" }}>{e.terms}</p></details></div>
         </aside>
-        <div className="card entry-request-card">
+        <div className="card entry-request-card" id="entry-request">
           {!e.state.open ? (
             <div className="empty" style={{ padding: 0 }}><h3>{e.stateLabel}</h3><p>{e.availability || "Entry pass requests for this event are not open right now."}</p></div>
           ) : e.members_only && !user ? (
