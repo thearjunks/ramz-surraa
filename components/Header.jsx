@@ -4,12 +4,13 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import { signOut } from "@/lib/actions";
+import { logo as siteLogo } from "@/lib/site";
 
 const NAV = [["Home", "/"], ["About", "/about/"], ["Events", "/events/"], ["Past Events", "/events/past/"], ["Gallery", "/gallery/"], ["Membership", "/membership/"], ["Contact", "/contact/"]];
 
 // Floating glass "capsule" header. A soft spotlight glides under the link you point at
 // and settles back on the current page; the current page shows a tiny live equalizer.
-export default function Header({ user, navigation = NAV, logo = "/images/surraa-logo.png", brandLabel = "Community Association" }) {
+export default function Header({ user, navigation = NAV, logo = siteLogo(), brandLabel = "Community Association" }) {
   const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -37,7 +38,7 @@ export default function Header({ user, navigation = NAV, logo = "/images/surraa-
   useLayoutEffect(() => { setOpen(false); home(); }, [path, home]);
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; }, [open]);
 
-  const acct = user ? (user.staff ? ["/cms/", "CMS"] : ["/account/", "My membership"]) : ["/sign-in/", "Member sign in"];
+  const acct = user ? (user.staff ? ["/admin/", "Admin"] : ["/account/", "My membership"]) : ["/sign-in/", "Member sign in"];
   const navItem = ([t, u, children], depth = 0) => <li key={`${depth}-${u}-${t}`} className={children?.length ? "nav-has-children" : ""}>
     <Link href={u} aria-current={cur(u)} onMouseEnter={(e) => depth === 0 && moveTo(e.currentTarget)} onFocus={(e) => depth === 0 && moveTo(e.currentTarget)}>
       {cur(u) && depth === 0 && <i className="eq" aria-hidden="true"><b /><b /><b /></i>}{t}{children?.length ? " ▾" : ""}

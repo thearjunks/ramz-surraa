@@ -4,9 +4,6 @@ export default {
   images: { unoptimized: true },
   experimental: { serverActions: { bodySizeLimit: "10mb" } },
   poweredByHeader: false,
-  async redirects() {
-    return [{ source: "/admin", destination: "/cms/", permanent: false }, { source: "/admin/:path*", destination: "/cms/:path*", permanent: false }];
-  },
   async headers() {
     return [{ source: "/:path*", headers: [
       { key: "X-Frame-Options", value: "SAMEORIGIN" },

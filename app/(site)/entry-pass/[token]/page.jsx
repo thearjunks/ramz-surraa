@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import QRCode from "qrcode";
 import Icon from "@/components/Icon";
 import { Timeline, noindex } from "@/components/blocks";
-import { src } from "@/lib/site";
-import { siteContent } from "@/lib/cms-site";
+import { C, src, logo } from "@/lib/site";
 import { db } from "@/lib/db";
 import { STATUS, fmtDT, fmtDate, fmtTime, eventStart, passesFor } from "@/lib/bookings";
 
@@ -14,7 +13,6 @@ export const metadata = { title: "Your Entry Pass | SURRAA Community Association
 // The access token in the URL is a 192-bit secret given only to the person who made the request
 // (after submitting, via tracking verification, or in their account).
 export default async function EntryPass({ params, searchParams }) {
-  const C = siteContent().company;
   const b = db.prepare("SELECT * FROM bookings WHERE access_token = ?").get((await params).token);
   if (!b) notFound();
   const e = db.prepare("SELECT * FROM events WHERE id = ?").get(b.event_id);
@@ -32,7 +30,7 @@ export default async function EntryPass({ params, searchParams }) {
         {!confirmed ? (
           <article className="ack">
             <div className="ack-top" style={{ backgroundImage: e.poster ? `linear-gradient(180deg,rgba(8,10,8,.55),var(--night)),url(${src(e.poster)})` : undefined }}>
-              <img src="/images/surraa-logo.png" alt="" className="ack-logo" />
+              <img src={logo()} alt="" className="ack-logo" />
               <small>{C.name}</small>
               <h2>Entry pass request</h2>
               <span className={"pill " + (["rejected", "cancelled", "expired"].includes(b.status) ? "past" : "warn")}>{STATUS[b.status]}</span>
@@ -53,7 +51,7 @@ export default async function EntryPass({ params, searchParams }) {
               {passes.map((p, i) => (
                 <article key={p.id} className="epass">
                   <div className="epass-top" style={{ backgroundImage: e.poster ? `linear-gradient(180deg,rgba(8,10,8,.4),var(--night)),url(${src(e.poster)})` : undefined }}>
-                    <img src="/images/surraa-logo.png" alt="" className="ack-logo" />
+                    <img src={logo()} alt="" className="ack-logo" />
                     <small>Official entry pass · {i + 1} of {passes.length}</small>
                     <h2>{e.name}</h2>
                     <span className="pill up">{p.checked_in_at ? "Checked in" : "Confirmed"}</span>

@@ -1,25 +1,23 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import SiteData from "@/components/SiteData";
 import { currentUser } from "@/lib/auth";
-import { cmsNavigation } from "@/lib/cms";
-import { siteContent } from "@/lib/cms-site";
-import { globalContent } from "@/lib/global-content";
-import { SiteContentProvider } from "@/components/SiteContentProvider";
+import "@/lib/content";
+import { C, M, page } from "@/lib/site";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
+
+export const dynamic = "force-dynamic"; // content can change any time from the CMS
 
 export default async function SiteLayout({ children }) {
   const u = await currentUser();
-  const navigation = cmsNavigation("header");
-  const footerNavigation = cmsNavigation("footer");
-  const content = siteContent();
-  const headerContent = globalContent("header");
-  const footerContent = globalContent("footer");
   return (
-    <SiteContentProvider value={content}>
-      <Header user={u ? { name: u.name, staff: u.role !== "member", contentOnly: ["editor", "content_manager"].includes(u.role) } : null} navigation={navigation} logo={headerContent.logo} brandLabel={headerContent.label} />
+    <SiteData value={{ company: { ...C }, membership: { ...M }, pages: { branding: page("branding") } }}>
+      <Header user={u ? { name: u.name, staff: u.role !== "member" } : null} />
       <main id="main">{children}</main>
-      <Footer navigation={footerNavigation} content={footerContent} />
+      <Footer />
       <Reveal />
-    </SiteContentProvider>
+      <AnalyticsTracker />
+    </SiteData>
   );
 }

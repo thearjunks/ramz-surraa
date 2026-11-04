@@ -1,12 +1,17 @@
 // Small shared building blocks (server components).
 import Link from "next/link";
 import Icon from "./Icon";
-import { src, status } from "@/lib/site";
-import { siteContent } from "@/lib/cms-site";
+import { M, src, status, logo } from "@/lib/site";
 
-export function PageHero({ crumb, children, lead }) {
+// Headings from the CMS: words between *stars* get the brand colour gradient, e.g. "How to *attend*"
+export function Grad({ t = "" }) {
+  return String(t).split(/(\*[^*]+\*)/).map((x, i) => (/^\*[^*]+\*$/.test(x) ? <span key={i} className="grad">{x.slice(1, -1)}</span> : x));
+}
+
+export function PageHero({ crumb, children, lead, image }) {
   return (
-    <section className="page-hero">
+    <section className={"page-hero" + (image ? " has-photo" : "")}>
+      {image && <div className="ph-photo" style={{ backgroundImage: `url(${src(image)})` }} aria-hidden="true" />}
       <div className="wrap">
         <Crumbs items={[[crumb]]} />
         {children}
@@ -29,7 +34,7 @@ export function ArtistCard({ a, tag }) {
   return (
     <div className="artist reveal" style={{ cursor: "default" }}>
       {a.photo ? <img src={src(a.photo)} alt={a.name} loading="lazy" />
-        : <div className="placeholder-art"><img src="/images/surraa-logo.png" alt="" /><small>Photo coming soon</small></div>}
+        : <div className="placeholder-art"><img src={logo()} alt="" /><small>Photo coming soon</small></div>}
       {tag && <span className="tag">{tag}</span>}
       <div className="info"><div className="role">{a.role}</div><h3>{a.name}</h3></div>
     </div>
@@ -47,11 +52,10 @@ export function StatusPill({ e }) {
 
 export const lcFirst = (s = "") => s.charAt(0).toLowerCase() + s.slice(1);
 
-export const feeText = () => { const M = siteContent().membership; return M.fee ? `${M.fee}${M.period ? " " + M.period : ""}` : "Shared on WhatsApp"; };
+export const feeText = () => (M.fee ? `${M.fee}${M.period ? " " + M.period : ""}` : "Shared on WhatsApp");
 
 // The 3-step "how membership works" strip, used on Home and Join
 export function Steps({ col }) {
-  const M = siteContent().membership;
   const s = [
     ["01", "Register", "Fill in the short form — name, WhatsApp, nationality and area."],
     ["02", "Pay the fee", M.fee ? `Membership fee ${feeText()}. We send payment details on WhatsApp.` : "We contact you on WhatsApp with the fee and payment details."],

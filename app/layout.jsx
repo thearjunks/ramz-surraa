@@ -1,23 +1,23 @@
 import "./globals.css";
-import { siteContent } from "@/lib/cms-site";
+import "@/lib/content"; // serve live CMS content
+import { C, page } from "@/lib/site";
 
 export function generateMetadata() {
-  const C = siteContent().company;
+  const s = page("seo");
+  let base; try { base = new URL(C.website || "https://www.surraa.com"); } catch { base = new URL("https://www.surraa.com"); }
   return {
-    metadataBase: new URL(C.website || "https://www.surraa.com"),
-    title: { default: `${C.name} | ${C.location}`, template: "%s" },
-    description: C.seoDescription,
-    icons: { icon: C.favicon },
-    openGraph: { type: "website", siteName: C.name, images: [C.ogImage] },
+    metadataBase: base,
+    title: { default: s.siteTitle, template: "%s" },
+    description: s.description,
+    openGraph: { type: "website", siteName: C.name, images: s.shareImage ? ["/" + s.shareImage.replace(/^\//, "")] : [] },
     twitter: { card: "summary_large_image" },
   };
 }
-export function generateViewport() { return { themeColor: siteContent().company.backgroundColor, width: "device-width", initialScale: 1, viewportFit: "cover" }; }
+export const viewport = { themeColor: "#080A08", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }) {
-  const C = siteContent().company;
   return (
-    <html lang="en" style={{ "--night": C.backgroundColor, "--green": C.primaryColor, "--volt": C.accentColor, "--grad": `linear-gradient(100deg,${C.primaryColor} 0%,${C.accentColor} 100%)` }}>
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

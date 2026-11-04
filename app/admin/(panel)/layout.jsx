@@ -11,6 +11,7 @@ const ITEMS = [
   ["Dashboard", "/admin/", "star", "dashboard"], ["Bookings", "/admin/bookings/", "ticket", "bookings.view"], ["Events", "/admin/events/", "cal", "events"],
   ["Contact messages", "/admin/messages/", "mail", "settings"],
   ["Members", "/admin/members/", "users", "users"], ["Users", "/admin/users/", "users", "users"], ["QR Check-in", "/admin/checkin/", "camera", "checkin"], ["Reports", "/admin/reports/", "sliders", "reports"],
+  ["Analytics", "/admin/analytics/", "chart", "analytics"],
   ["Settings", "/admin/settings/", "screen", "settings"], ["Audit Log", "/admin/audit/", "search", "audit"],
 ];
 
