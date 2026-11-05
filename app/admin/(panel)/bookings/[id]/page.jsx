@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Icon from "@/components/Icon";
 import ActionForm from "@/components/ActionForm";
 import { Head, StatusTag, PayTag, kd } from "@/components/admin/ui";
-import { CivilReveal, ConfirmButton } from "@/components/admin/Client";
+import { CivilReveal, ConfirmButton, EmailSendButton } from "@/components/admin/Client";
 import { db } from "@/lib/db";
 import { requirePerm, can, siteUrl } from "@/lib/auth";
 import { STATUS, ADMIN_SETTABLE, fmtDT, fmtDate, eventStart, passesFor, historyFor, eventStats } from "@/lib/bookings";
@@ -39,7 +39,8 @@ export default async function Booking({ params, searchParams }) {
         {can(u, "bookings.delete") && <form action={deleteBooking}><input type="hidden" name="id" value={b.id} /><input type="hidden" name="confirm" value={b.ref} />
           <ConfirmButton className="btn btn-ghost" message={`Permanently delete ${b.ref} and its passes, payment, history and notification records? This cannot be undone.`}>Delete booking</ConfirmButton></form>}
       </Head>
-      {sp.sent && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Notification sent (see log below).</div>}
+      {sp.mail === "sent" && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}><b>Email sent successfully.</b> The customer notification has been delivered to the mail service and recorded below.</div>}
+      {sp.mail === "failed" && <div className="notice err" style={{ display: "block", marginBottom: 14 }}><b>Email was not sent.</b> Please check the notification log below for the reason, then try again.</div>}
 
       <div className="a-cols">
         <div className="stack">
@@ -62,7 +63,7 @@ export default async function Booking({ params, searchParams }) {
               <a className="btn btn-ghost btn-sm" href={waLink(b.mobile, msg)} target="_blank" rel="noopener"><Icon name="wa" />WhatsApp</a>
               <a className="btn btn-ghost btn-sm" href={"tel:" + b.mobile}><Icon name="phone" />Call</a>
               <a className="btn btn-ghost btn-sm" href={`mailto:${b.email}?subject=${encodeURIComponent("Your entry pass request " + b.ref)}`}><Icon name="mail" />Email</a>
-              {update && <form action={resendConfirmation}><input type="hidden" name="id" value={b.id} /><button className="btn btn-ghost btn-sm">Resend status email</button></form>}
+              {update && <form action={resendConfirmation}><input type="hidden" name="id" value={b.id} /><EmailSendButton /></form>}
             </div>
           </section>
 

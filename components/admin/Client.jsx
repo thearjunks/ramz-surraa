@@ -1,6 +1,7 @@
 "use client";
 // Small interactive bits for the admin: saved filter presets, select-all, Civil ID reveal, confirm-before-submit.
 import { useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { revealCivil } from "@/lib/admin-actions";
 
 export function Presets() {
@@ -44,4 +45,9 @@ export function BulkDeleteButton({ action }) {
   }, []);
   if (!count) return null;
   return <ConfirmButton className="btn btn-ghost btn-sm" formAction={action} message={`Permanently delete ${count} selected booking${count === 1 ? "" : "s"} and all related records? This cannot be undone.`}>Delete selected ({count})</ConfirmButton>;
+}
+
+export function EmailSendButton() {
+  const { pending } = useFormStatus();
+  return <button className="btn btn-ghost btn-sm" disabled={pending}>{pending ? "Sending email…" : "Resend status email"}</button>;
 }

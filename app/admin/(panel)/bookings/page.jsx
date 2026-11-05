@@ -39,6 +39,7 @@ export default async function Bookings({ searchParams }) {
         <select className="input" name="status" defaultValue={sp.status}><option value="">Any status</option><option value="open_requests">Pending (all open)</option><option value="confirmed_any">Confirmed (incl. checked in)</option>{Object.entries(STATUS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
         {finance && <select className="input" name="payment" defaultValue={sp.payment}><option value="">Any payment</option>{Object.entries(PAYMENT_STATUS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>}
         <select className="input" name="type" defaultValue={sp.type}><option value="">Member & guest</option><option value="member">Members</option><option value="guest">Guests</option></select>
+        <select className="input" name="email" defaultValue={sp.email}><option value="">Email: any</option><option value="sent">Email sent</option><option value="failed">Email failed</option><option value="none">No email attempt</option></select>
         <select className="input" name="checked" defaultValue={sp.checked}><option value="">Check-in: any</option><option value="yes">Checked in</option><option value="no">Not checked in</option></select>
         <input className="input" name="nationality" defaultValue={sp.nationality} placeholder="Nationality" />
         <input className="input" name="qty" type="number" min="1" defaultValue={sp.qty} placeholder="Pass qty" />
