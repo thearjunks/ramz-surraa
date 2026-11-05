@@ -10,6 +10,7 @@ export default async function Settings() {
   await requirePerm("settings");
   const notes = db.prepare("SELECT * FROM notifications ORDER BY id DESC LIMIT 50").all();
   const hasToken = !!setting("wa_token");
+  const graphMail = !!(process.env.GRAPH_TENANT_ID && process.env.GRAPH_CLIENT_ID && process.env.GRAPH_CLIENT_SECRET);
   return (
     <>
       <Head title="Settings" sub="Notifications and system configuration." />
@@ -24,7 +25,7 @@ export default async function Settings() {
             ...(hasToken ? [{ name: "clear_token", type: "checkbox", label: "Remove saved token" }] : []),
           ]} />
           <h2 style={{ marginTop: 26 }}>Email</h2>
-          <p className="muted" style={{ fontSize: 14 }}>Email is {process.env.SMTP_HOST ? <b>configured ({process.env.SMTP_HOST})</b> : <b>not configured</b>}. SURRAA customer mail is sent from <b>info@surraa.com</b> through Office 365 using STARTTLS on port <code>587</code>. Failed deliveries remain in the log below and can be retried.</p>
+          <p className="muted" style={{ fontSize: 14 }}>Email is {graphMail ? <b>configured (Microsoft Graph)</b> : process.env.SMTP_HOST ? <b>configured ({process.env.SMTP_HOST})</b> : <b>not configured</b>}. SURRAA customer mail is sent from <b>info@surraa.com</b>. Failed deliveries remain in the log below and can be retried.</p>
         </section>
         <section className="a-card">
           <h2>Notification log</h2>
