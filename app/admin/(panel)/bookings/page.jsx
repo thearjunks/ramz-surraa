@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import { Head, StatusTag, PayTag, kd } from "@/components/admin/ui";
-import { Presets, SelectAll } from "@/components/admin/Client";
+import { ConfirmButton, Presets, SelectAll } from "@/components/admin/Client";
 import { db } from "@/lib/db";
 import { requirePerm, can } from "@/lib/auth";
 import { STATUS, fmtDT, sweepExpired } from "@/lib/bookings";
 import { bookingQuery, FILTER_KEYS, PAYMENT_STATUS } from "@/lib/admin-query";
 import { maskCivil } from "@/lib/security";
-import { bulkStatus } from "@/lib/admin-actions";
+import { bulkStatus, deleteBooking } from "@/lib/admin-actions";
 
 const PER = 25;
 
@@ -68,7 +68,8 @@ export default async function Bookings({ searchParams }) {
                   <td className="nowrap">{fmtDT(r.created_at)}</td>
                   <td>{r.page_url ? <a href={r.page_url} target="_blank" rel="noopener" title={r.page_url}>link</a> : "—"}</td>
                   <td className="nowrap">{r.confirmed_at ? <>{fmtDT(r.confirmed_at)}<br /><small>{r.confirmed_by_name}</small></> : "—"}</td>
-                  <td><Link className="btn btn-ghost btn-sm" href={`/admin/bookings/${r.id}/`}>Open</Link></td>
+                  <td><div className="btn-row" style={{ flexWrap: "nowrap" }}><Link className="btn btn-ghost btn-sm" href={`/admin/bookings/${r.id}/`}>Open</Link>
+                    {can(u, "bookings.delete") && <ConfirmButton className="btn btn-ghost btn-sm" formAction={deleteBooking} name="delete" value={`${r.id}|${r.ref}`} message={`Permanently delete ${r.ref} and all related records? This cannot be undone.`}>Delete</ConfirmButton>}</div></td>
                 </tr>
               ))}
               {!rows.length && <tr><td colSpan="17" className="muted" style={{ padding: 30, textAlign: "center" }}>No bookings match these filters.</td></tr>}

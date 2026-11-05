@@ -31,6 +31,6 @@ export function CivilReveal({ id, masked, allowed }) {
   return v ? <span className="mono">{v}</span> : <span>{masked} <button type="button" className="linkish" onClick={async () => setV(await revealCivil(id))}>Reveal (logged)</button></span>;
 }
 
-export function ConfirmButton({ children, message, className = "btn btn-ghost" }) {
-  return <button className={className} onClick={(e) => { if (!confirm(message)) e.preventDefault(); }}>{children}</button>;
+export function ConfirmButton({ children, message, className = "btn btn-ghost", ...props }) {
+  return <button className={className} {...props} onClick={(e) => { if (!confirm(message)) e.preventDefault(); }}>{children}</button>;
 }
