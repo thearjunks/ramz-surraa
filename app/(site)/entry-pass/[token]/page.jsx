@@ -25,7 +25,7 @@ export default async function EntryPass({ params, searchParams }) {
   return (
     <section className="section" style={{ paddingTop: "calc(var(--hh,80px) + 40px)" }}>
       <div className="wrap" style={{ maxWidth: 980 }}>
-        {isNew && <div className="m-banner" style={{ marginBottom: 24 }}><Icon name="star" /><span><b>Thank you for requesting your entry pass.</b> Your request has been received successfully and is currently awaiting confirmation. Our team will contact you shortly regarding the next steps. You can track your request using your booking reference number.</span></div>}
+        {isNew && <div className="m-banner" style={{ marginBottom: 24 }}><Icon name="star" /><span><b>Your booking request has been submitted successfully.</b> A copy of this request has been sent to the email address you provided. This is only your booking acknowledgement, not your entry ticket. Once our team confirms your booking, we will email your official ticket with your name and QR code. Please bring that confirmed ticket to join the event. You can track your request at any time using the booking reference below.</span></div>}
 
         {!confirmed ? (
           <article className="ack">
