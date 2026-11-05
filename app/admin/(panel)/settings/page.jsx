@@ -24,7 +24,7 @@ export default async function Settings() {
             ...(hasToken ? [{ name: "clear_token", type: "checkbox", label: "Remove saved token" }] : []),
           ]} />
           <h2 style={{ marginTop: 26 }}>Email</h2>
-          <p className="muted" style={{ fontSize: 14 }}>Email is {process.env.SMTP_HOST ? <b>configured ({process.env.SMTP_HOST})</b> : <b>not configured</b>}. Set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS and MAIL_FROM in the <code>.env.local</code> file and restart. Until then emails (incl. password reset links) are logged below and printed in the server window.</p>
+          <p className="muted" style={{ fontSize: 14 }}>Email is {process.env.SMTP_HOST ? <b>configured ({process.env.SMTP_HOST})</b> : <b>not configured</b>}. SURRAA customer mail must use the <b>info@surraa.com</b> Titan mailbox: <code>smtp.titan.email</code>, SSL port <code>465</code>. Failed deliveries remain in the log below and can be retried.</p>
         </section>
         <section className="a-card">
           <h2>Notification log</h2>
