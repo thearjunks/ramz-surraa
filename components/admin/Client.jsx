@@ -34,3 +34,14 @@ export function CivilReveal({ id, masked, allowed }) {
 export function ConfirmButton({ children, message, className = "btn btn-ghost", ...props }) {
   return <button className={className} {...props} onClick={(e) => { if (!confirm(message)) e.preventDefault(); }}>{children}</button>;
 }
+
+export function BulkDeleteButton({ action }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const update = () => setCount(document.querySelectorAll('input[name="ids"]:checked').length);
+    document.addEventListener("change", update);
+    return () => document.removeEventListener("change", update);
+  }, []);
+  if (!count) return null;
+  return <ConfirmButton className="btn btn-ghost btn-sm" formAction={action} message={`Permanently delete ${count} selected booking${count === 1 ? "" : "s"} and all related records? This cannot be undone.`}>Delete selected ({count})</ConfirmButton>;
+}

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import { Head, StatusTag, PayTag, kd } from "@/components/admin/ui";
-import { ConfirmButton, Presets, SelectAll } from "@/components/admin/Client";
+import { BulkDeleteButton, ConfirmButton, Presets, SelectAll } from "@/components/admin/Client";
 import { db } from "@/lib/db";
 import { requirePerm, can } from "@/lib/auth";
 import { STATUS, fmtDT, sweepExpired } from "@/lib/bookings";
 import { bookingQuery, FILTER_KEYS, PAYMENT_STATUS } from "@/lib/admin-query";
 import { maskCivil } from "@/lib/security";
-import { bulkStatus, deleteBooking } from "@/lib/admin-actions";
+import { bulkDeleteBookings, bulkStatus, deleteBooking } from "@/lib/admin-actions";
 
 const PER = 25;
 
@@ -31,6 +31,7 @@ export default async function Bookings({ searchParams }) {
       </Head>
       {sp.bulk !== undefined && <div className={"notice " + (sp.bulk === "0" ? "err" : "ok")} style={{ display: "block", marginBottom: 14 }}>{sp.bulk === "0" ? "Bulk update not applied — select bookings, a status, and tick the confirmation box." : `${sp.bulk} bookings updated.`}</div>}
       {sp.deleted && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Booking and its related records were deleted.</div>}
+      {sp.bulkDeleted && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>{sp.bulkDeleted} selected booking{sp.bulkDeleted === "1" ? "" : "s"} and related records were deleted.</div>}
 
       <form className="a-filters" method="get">
         <input className="input" name="q" defaultValue={sp.q} placeholder="Reference, name, mobile, email, serial, member ID…" style={{ gridColumn: "span 2" }} />
@@ -81,6 +82,7 @@ export default async function Bookings({ searchParams }) {
           <select className="input" name="status" defaultValue=""><option value="">Choose status…</option><option value="under_review">Under Review</option><option value="contacted">Contacted</option><option value="awaiting">Awaiting Completion</option><option value="cancelled">Cancel</option><option value="expired">Expire</option></select>
           <label className="consent"><input type="checkbox" name="confirm" value="yes" /> I checked the selection</label>
           <button className="btn btn-ghost btn-sm">Apply to selected</button>
+          {can(u, "bookings.delete") && <BulkDeleteButton action={bulkDeleteBookings} />}
           <small className="muted">Confirmations are done one booking at a time.</small>
         </div>
       </form>
