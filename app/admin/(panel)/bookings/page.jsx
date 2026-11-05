@@ -30,6 +30,7 @@ export default async function Bookings({ searchParams }) {
         <a className="btn btn-ghost" href={"/admin/export/" + exportQs + "&report=bookings&format=pdf"}>PDF</a>
       </Head>
       {sp.bulk !== undefined && <div className={"notice " + (sp.bulk === "0" ? "err" : "ok")} style={{ display: "block", marginBottom: 14 }}>{sp.bulk === "0" ? "Bulk update not applied — select bookings, a status, and tick the confirmation box." : `${sp.bulk} bookings updated.`}</div>}
+      {sp.deleted && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Booking and its related records were deleted.</div>}
 
       <form className="a-filters" method="get">
         <input className="input" name="q" defaultValue={sp.q} placeholder="Reference, name, mobile, email, serial, member ID…" style={{ gridColumn: "span 2" }} />

@@ -11,7 +11,7 @@ import { maskCivil, decrypt } from "@/lib/security";
 import { PAYMENT_STATUS, PAYMENT_METHODS } from "@/lib/admin-query";
 import { waLink } from "@/lib/notify";
 import { holdersForBooking, holderName } from "@/lib/pass-holders";
-import { updateStatus, savePayment, saveNotes, editBooking, resendConfirmation, retryNotification, reissue } from "@/lib/admin-actions";
+import { updateStatus, savePayment, saveNotes, editBooking, deleteBooking, resendConfirmation, retryNotification, reissue } from "@/lib/admin-actions";
 
 export default async function Booking({ params, searchParams }) {
   const u = await requirePerm("bookings.view");
@@ -36,6 +36,8 @@ export default async function Booking({ params, searchParams }) {
       <Head title={b.ref} sub={`${e.event_code} · ${e.name} · ${fmtDate(eventStart(e))}`}>
         <Link className="btn btn-ghost" href="/admin/bookings/">← All bookings</Link>
         {passes.some((p) => p.status === "valid") && <a className="btn btn-ghost" href={`/entry-pass-pdf/${b.access_token}/?download=1`}><Icon name="ticket" />Download passes</a>}
+        {can(u, "bookings.delete") && <form action={deleteBooking}><input type="hidden" name="id" value={b.id} /><input type="hidden" name="confirm" value={b.ref} />
+          <ConfirmButton className="btn btn-ghost" message={`Permanently delete ${b.ref} and its passes, payment, history and notification records? This cannot be undone.`}>Delete booking</ConfirmButton></form>}
       </Head>
       {sp.sent && <div className="notice ok" style={{ display: "block", marginBottom: 14 }}>Notification sent (see log below).</div>}
 

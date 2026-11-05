@@ -29,7 +29,7 @@ export default async function RequestPass({ params }) {
     { name: "nationality", label: "Nationality", required: true, list: "nat-list", autoComplete: "off", defaultValue: user?.nationality },
     user?.civil_enc
       ? { name: "civil", label: "Civil ID number", inputMode: "numeric", maxLength: 14, placeholder: `Saved: •••• ${user.civil_last4} — leave blank to use it`, hint: "Your saved Civil ID is used unless you enter a different one." }
-      : { name: "civil", label: "Civil ID number", required: true, inputMode: "numeric", maxLength: 14, placeholder: "12 digits", hint: "Stored encrypted and visible only to authorised staff. Never shown on passes or QR codes." },
+      : { name: "civil", label: "Civil ID number (optional)", inputMode: "numeric", maxLength: 14, placeholder: "12 digits", hint: "Optional. If provided, it is stored encrypted and never shown on passes or QR codes." },
     { name: "address_section", type: "section", step: "02", label: "Where you live", hint: "Choose your Kuwait governorate." },
     { name: "governorate", label: "Governorate", type: "select", required: true, options: [
       ["Al Asimah", "Al Asimah"], ["Al Farwaniya", "Al Farwaniya"], ["Hawalli", "Hawalli"],
