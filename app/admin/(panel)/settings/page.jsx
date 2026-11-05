@@ -3,14 +3,17 @@ import { Head } from "@/components/admin/ui";
 import { db, setting } from "@/lib/db";
 import { requirePerm } from "@/lib/auth";
 import { fmtDT } from "@/lib/bookings";
-import { waLink } from "@/lib/notify";
+import { mailProvider, waLink } from "@/lib/notify";
 import { saveSettings, retryNotification } from "@/lib/admin-actions";
 
 export default async function Settings() {
   await requirePerm("settings");
   const notes = db.prepare("SELECT * FROM notifications ORDER BY id DESC LIMIT 50").all();
   const hasToken = !!setting("wa_token");
-  const graphMail = process.env.MAIL_PROVIDER !== "smtp" && !!(process.env.GRAPH_TENANT_ID && process.env.GRAPH_CLIENT_ID && process.env.GRAPH_CLIENT_SECRET);
+  const provider = mailProvider();
+  const sender = provider === "smtp"
+    ? process.env.SMTP_USERNAME || process.env.SMTP_USER || "not configured"
+    : process.env.GRAPH_SENDER || "info@surraa.com";
   return (
     <>
       <Head title="Settings" sub="Notifications and system configuration." />
@@ -25,7 +28,7 @@ export default async function Settings() {
             ...(hasToken ? [{ name: "clear_token", type: "checkbox", label: "Remove saved token" }] : []),
           ]} />
           <h2 style={{ marginTop: 26 }}>Email</h2>
-          <p className="muted" style={{ fontSize: 14 }}>Email is {graphMail ? <b>configured (Microsoft Graph)</b> : process.env.SMTP_HOST ? <b>configured ({process.env.SMTP_HOST})</b> : <b>not configured</b>}. Customer mail is sent from <b>{process.env.MAIL_FROM || process.env.SMTP_USERNAME || "info@surraa.com"}</b>. Failed deliveries remain in the log below and can be retried.</p>
+          <p className="muted" style={{ fontSize: 14 }}>Email is {provider === "graph" ? <b>configured (Microsoft Graph)</b> : provider === "smtp" ? <b>configured ({process.env.SMTP_HOST})</b> : <b>not configured</b>}. Customer mail is sent from <b>{sender}</b>. Failed deliveries remain in the log below and can be retried.</p>
         </section>
         <section className="a-card">
           <h2>Notification log</h2>
