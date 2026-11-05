@@ -3,6 +3,7 @@ import ContactLink from "@/components/ContactLink";
 import EnquiryForm, { Field } from "@/components/EnquiryForm";
 import { PageHero, Grad } from "@/components/ui";
 import { C, page } from "@/lib/site";
+import ParentCompany from "@/components/ParentCompany";
 
 export const metadata = { title: "Contact | SURRAA Community Association Kuwait", description: "Contact SURRAA Community Association in Kuwait." };
 
@@ -29,6 +30,7 @@ export default function Contact() {
           </EnquiryForm>
         </div>
       </div></section>
+      <section className="section parent-company-section" style={{ paddingTop: 0 }}><div className="wrap"><ParentCompany /></div></section>
     </>
   );
 }

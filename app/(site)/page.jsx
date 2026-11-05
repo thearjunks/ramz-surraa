@@ -6,6 +6,7 @@ import { ArtistCard, Grad } from "@/components/ui";
 import { PassButton } from "@/components/blocks";
 import { C, D, src, artistBy, page } from "@/lib/site";
 import { publicEvents, view } from "@/lib/bookings";
+import ParentCompany from "@/components/ParentCompany";
 
 export const dynamic = "force-dynamic";
 
@@ -103,6 +104,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="section parent-company-section"><div className="wrap"><ParentCompany /></div></section>
     </>
   );
 }
